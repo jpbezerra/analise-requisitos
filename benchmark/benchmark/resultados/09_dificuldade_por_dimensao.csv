@@ -1,0 +1,5 @@
+defect,criterion,mean_drop
+ambiguity,unambiguity,1.0416666666666667
+incompleteness,completeness,1.8541666666666665
+non_verifiability,verifiability,2.611111111111111
+inconsistency,consistency,3.7152777777777777

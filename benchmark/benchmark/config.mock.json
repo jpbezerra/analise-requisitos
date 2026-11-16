@@ -1,0 +1,5 @@
+{"repeticoes": {"P0": 3, "P1": 1, "P2": 1},
+ "modelos": [
+  {"label": "mockA", "provider": "mock", "model": "mockA", "temperature": 0},
+  {"label": "mockB", "provider": "mock", "model": "mockB", "temperature": 0},
+  {"label": "mockC", "provider": "mock", "model": "mockC", "temperature": 0}]}

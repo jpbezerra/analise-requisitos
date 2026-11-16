@@ -1,0 +1,251 @@
+"id_requisito","id_base","titulo_base","versao","texto","contexto","defeito_injetado","criterio_afetado","nota_esperada","decisao_esperada","justificativa_da_mutacao"
+"B01-O","B01","Create task","original","When a signed-in user submits the 'New task' form with a title of 1 to 120 characters, the system shall create the task in the selected list with status 'open' and display it at the top of that list within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-05: Task titles are limited to 120 characters.","none","none","all criteria >= 4","accept","baseline requirement"
+"B01-AMB","B01","Create task","ambiguity","When a signed-in user submits the 'New task' form with a title of 1 to 120 characters, the system shall create the task in the selected list with status 'open' and display it at the top of the list or of the page within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-05: Task titles are limited to 120 characters.","ambiguity","unambiguity","unambiguity <= 2","revise","'the top of the list or of the page' admits two placements"
+"B01-INC","B01","Create task","incompleteness","When a signed-in user submits the 'New task' form, the system shall create the task within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-05: Task titles are limited to 120 characters.","incompleteness","completeness","completeness <= 2","revise","removes title limit, target list, initial status and display behaviour"
+"B01-NV","B01","Create task","non_verifiability","When a signed-in user submits the 'New task' form with a title of 1 to 120 characters, the system shall create the task in the selected list with status 'open' and display it at the top of that list almost instantly.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-05: Task titles are limited to 120 characters.","non_verifiability","verifiability","verifiability <= 2","revise","'almost instantly' replaces the 2-second limit"
+"B01-CON","B01","Create task","inconsistency","When a signed-in user submits the 'New task' form with a title of 1 to 120 characters, the system shall create the task in the selected list with status 'pending' and display it at the top of that list within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-05: Task titles are limited to 120 characters.","inconsistency","consistency","consistency <= 2","revise","status 'pending' is not in CR-02 (only 'open' or 'done')"
+"B02-O","B02","Complete task","original","When a user marks an open task as done, the system shall set its status to 'done', record the completion date and time, and move the task to the 'Completed' section of its list within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-03: Each list shows open tasks in its main section and done tasks in a collapsed 'Completed' section.","none","none","all criteria >= 4","accept","baseline requirement"
+"B02-AMB","B02","Complete task","ambiguity","When a user marks an open task as done, the system shall set its status to 'done', record the completion date and time, and move the task to the 'Completed' section of its list or to the archive within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-03: Each list shows open tasks in its main section and done tasks in a collapsed 'Completed' section.","ambiguity","unambiguity","unambiguity <= 2","revise","'or to the archive' admits two destinations"
+"B02-INC","B02","Complete task","incompleteness","When a user marks an open task as done, the system shall set its status to 'done'.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-03: Each list shows open tasks in its main section and done tasks in a collapsed 'Completed' section.","incompleteness","completeness","completeness <= 2","revise","removes completion timestamp, relocation and time limit"
+"B02-NV","B02","Complete task","non_verifiability","When a user marks an open task as done, the system shall set its status to 'done', record the completion date and time, and move the task to the 'Completed' section of its list in a timely manner.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-03: Each list shows open tasks in its main section and done tasks in a collapsed 'Completed' section.","non_verifiability","verifiability","verifiability <= 2","revise","'in a timely manner' replaces the 2-second limit"
+"B02-CON","B02","Complete task","inconsistency","When a user marks an open task as done, the system shall set its status to 'done', record the completion date and time, and remove the task from its list permanently within 2 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-03: Each list shows open tasks in its main section and done tasks in a collapsed 'Completed' section.","inconsistency","consistency","consistency <= 2","revise","permanent removal contradicts CR-03 (done tasks stay in 'Completed')"
+"B03-O","B03","Edit task","original","A signed-in user shall be able to change the title, description, and due date of a task in a list they own or that is shared with them as 'editor'; the system shall save the change and display the updated values within 2 seconds, and shall reject an empty title or a title longer than 120 characters with the message 'Title must be 1-120 characters'.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-05: Task titles are limited to 120 characters.","none","none","all criteria >= 4","accept","baseline requirement"
+"B03-AMB","B03","Edit task","ambiguity","A signed-in user shall be able to change the title, description, and due date of a task in a list they own or that is shared with them as 'editor'; the system shall save the change and display the updated values within 2 seconds, and shall reject an empty title or a title longer than 120 characters or show the message 'Title must be 1-120 characters'.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-05: Task titles are limited to 120 characters.","ambiguity","unambiguity","unambiguity <= 2","revise","'reject ... or show the message' admits two behaviours"
+"B03-INC","B03","Edit task","incompleteness","A signed-in user shall be able to change the title, description, and due date of a task in a list they own or that is shared with them as 'editor'; the system shall save the change.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-05: Task titles are limited to 120 characters.","incompleteness","completeness","completeness <= 2","revise","removes display time and validation rules"
+"B03-NV","B03","Edit task","non_verifiability","A signed-in user shall be able to change the title, description, and due date of a task in a list they own or that is shared with them as 'editor'; the system shall save the change and display the updated values within 2 seconds, and shall reject an invalid title with an appropriate, user-friendly error message.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-05: Task titles are limited to 120 characters.","non_verifiability","verifiability","verifiability <= 2","revise","'invalid' and 'user-friendly' are not measurable and the limit is gone"
+"B03-CON","B03","Edit task","inconsistency","A signed-in user shall be able to change the title, description, and due date of a task in a list they own or that is shared with them as 'editor'; the system shall save the change and display the updated values within 2 seconds, and shall reject an empty title or a title longer than 255 characters with the message 'Title must be 1-255 characters'.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-05: Task titles are limited to 120 characters.","inconsistency","consistency","consistency <= 2","revise","255-character limit contradicts CR-05 (120)"
+"B04-O","B04","Due date reminder","original","When a task has a due date and its status is 'open', the system shall send the owner of the task's list an in-app reminder 24 hours before the due date and shall show an 'Overdue' label next to the task in the list view once the due date has passed, without changing its status.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-06: Reminders are delivered in-app only; this release does not send e-mail or SMS notifications.
+CR-07: Due dates include date and time, are stored in UTC, and are shown in the user's time zone.","none","none","all criteria >= 4","accept","baseline requirement"
+"B04-AMB","B04","Due date reminder","ambiguity","When a task has a due date and its status is 'open', the system shall send the owner of the task's list an in-app reminder one day before the due date and shall show an 'Overdue' label next to the task in the list view once the due date has passed, without changing its status.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-06: Reminders are delivered in-app only; this release does not send e-mail or SMS notifications.
+CR-07: Due dates include date and time, are stored in UTC, and are shown in the user's time zone.","ambiguity","unambiguity","unambiguity <= 2","revise","'one day' can mean 24 hours or the calendar day before"
+"B04-INC","B04","Due date reminder","incompleteness","When a task has a due date, the system shall send a reminder before the due date and flag the task as overdue after it.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-06: Reminders are delivered in-app only; this release does not send e-mail or SMS notifications.
+CR-07: Due dates include date and time, are stored in UTC, and are shown in the user's time zone.","incompleteness","completeness","completeness <= 2","revise","removes recipient, channel, lead time, status condition and where the flag appears"
+"B04-NV","B04","Due date reminder","non_verifiability","When a task has a due date and its status is 'open', the system shall send the owner of the task's list an in-app reminder shortly before the due date and shall clearly flag the task as overdue in the list view once the due date has passed, without changing its status.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-06: Reminders are delivered in-app only; this release does not send e-mail or SMS notifications.
+CR-07: Due dates include date and time, are stored in UTC, and are shown in the user's time zone.","non_verifiability","verifiability","verifiability <= 2","revise","'shortly before' and 'clearly flag' are not measurable"
+"B04-CON","B04","Due date reminder","inconsistency","When a task has a due date and its status is 'open', the system shall send the owner of the task's list an e-mail reminder 24 hours before the due date and shall show an 'Overdue' label next to the task in the list view once the due date has passed, without changing its status.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-06: Reminders are delivered in-app only; this release does not send e-mail or SMS notifications.
+CR-07: Due dates include date and time, are stored in UTC, and are shown in the user's time zone.","inconsistency","consistency","consistency <= 2","revise","e-mail channel contradicts CR-06 (in-app only)"
+"B05-O","B05","Lists","original","The system shall allow a signed-in user to create up to 50 lists, each with a name of 1 to 40 characters that is unique among that user's lists, and to delete any of their lists except 'Inbox' after the user confirms the deletion, which also deletes the tasks in that list.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-08: Each user starts with a default list named 'Inbox', which cannot be deleted.","none","none","all criteria >= 4","accept","baseline requirement"
+"B05-AMB","B05","Lists","ambiguity","The system shall allow a signed-in user to create up to 50 lists, each with a unique name of 1 to 40 characters, and to delete any of their lists except 'Inbox' after the user confirms the deletion, which also deletes the tasks in that list.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-08: Each user starts with a default list named 'Inbox', which cannot be deleted.","ambiguity","unambiguity","unambiguity <= 2","revise","'unique' without scope (per user or global)"
+"B05-INC","B05","Lists","incompleteness","The system shall allow a signed-in user to create lists and to delete them.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-08: Each user starts with a default list named 'Inbox', which cannot be deleted.","incompleteness","completeness","completeness <= 2","revise","removes the list limit, name rules and confirmation"
+"B05-NV","B05","Lists","non_verifiability","The system shall allow a signed-in user to create a reasonable number of lists, each with a short name that is unique among that user's lists, and to delete any of their lists except 'Inbox' after the user confirms the deletion, which also deletes the tasks in that list.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-08: Each user starts with a default list named 'Inbox', which cannot be deleted.","non_verifiability","verifiability","verifiability <= 2","revise","'reasonable number' and 'short name' are not measurable"
+"B05-CON","B05","Lists","inconsistency","The system shall allow a signed-in user to create up to 50 lists, each with a name of 1 to 40 characters that is unique among that user's lists, and to delete any of their lists, including 'Inbox', after the user confirms the deletion, which also deletes the tasks in that list.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-01: Every task belongs to exactly one list.
+CR-08: Each user starts with a default list named 'Inbox', which cannot be deleted.","inconsistency","consistency","consistency <= 2","revise","deleting 'Inbox' contradicts CR-08"
+"B06-O","B06","Delete task","original","When a user deletes a task, the system shall remove it from the list, keep it in the 'Trash' for 30 days after the deletion, and allow the task owner to restore it from the Trash during that period; after 30 days the system shall delete the task permanently.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.","none","none","all criteria >= 4","accept","baseline requirement"
+"B06-AMB","B06","Delete task","ambiguity","When a user deletes a task, the system shall remove it from the list, keep it in the 'Trash', and allow the task owner to restore it from the Trash until 30 days have passed, at which point the system shall delete the task permanently.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.","ambiguity","unambiguity","unambiguity <= 2","revise","'until 30 days have passed' does not say since when"
+"B06-INC","B06","Delete task","incompleteness","When a user deletes a task, the system shall remove it from the list and keep it in the 'Trash'.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.","incompleteness","completeness","completeness <= 2","revise","removes retention period, restore and permanent deletion"
+"B06-NV","B06","Delete task","non_verifiability","When a user deletes a task, the system shall remove it from the list, keep it in the 'Trash' for a while, and allow the task owner to restore it from the Trash easily; afterwards the system shall delete the task permanently.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.","non_verifiability","verifiability","verifiability <= 2","revise","'for a while' and 'easily' are not measurable"
+"B06-CON","B06","Delete task","inconsistency","When a user deletes a task, the system shall remove it from the list, keep it in the 'Trash' for 90 days after the deletion, and allow the task owner to restore it from the Trash during that period; after 90 days the system shall delete the task permanently.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.","inconsistency","consistency","consistency <= 2","revise","90-day retention contradicts CR-10 (30 days)"
+"B07-O","B07","Sort tasks","original","The system shall let a user sort the open tasks of a list by due date (earliest first), by creation date (newest first), or by title (A-Z), and shall apply the selected order within 1 second for lists of up to 500 tasks.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-11: Tasks without a due date are always listed after tasks with a due date.","none","none","all criteria >= 4","accept","baseline requirement"
+"B07-AMB","B07","Sort tasks","ambiguity","The system shall let a user sort the open tasks of a list by date or by title, and shall apply the selected order within 1 second for lists of up to 500 tasks.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-11: Tasks without a due date are always listed after tasks with a due date.","ambiguity","unambiguity","unambiguity <= 2","revise","'date' can be due date or creation date, and no direction is given"
+"B07-INC","B07","Sort tasks","incompleteness","The system shall let a user sort the open tasks of a list by due date, creation date, or title.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-11: Tasks without a due date are always listed after tasks with a due date.","incompleteness","completeness","completeness <= 2","revise","removes order direction, response time and list size"
+"B07-NV","B07","Sort tasks","non_verifiability","The system shall let a user sort the open tasks of a list by due date (earliest first), by creation date (newest first), or by title (A-Z), and shall apply the selected order quickly, even for large lists.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-11: Tasks without a due date are always listed after tasks with a due date.","non_verifiability","verifiability","verifiability <= 2","revise","'quickly' and 'large lists' are not measurable"
+"B07-CON","B07","Sort tasks","inconsistency","The system shall let a user sort the open tasks of a list by due date (earliest first, with tasks without a due date shown first), by creation date (newest first), or by title (A-Z), and shall apply the selected order within 1 second for lists of up to 500 tasks.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-02: A task has a title, an optional description, an optional due date, and a status that is either 'open' or 'done'.
+CR-11: Tasks without a due date are always listed after tasks with a due date.","inconsistency","consistency","consistency <= 2","revise","no-due-date tasks first contradicts CR-11"
+"B08-O","B08","Search","original","The system shall provide a search box that returns, within 1 second, all open and done tasks accessible to the user whose title or description contains the entered text, ignoring letter case, and shall display 'No tasks found' when there are no matches.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-12: Search covers only tasks the user can access.","none","none","all criteria >= 4","accept","baseline requirement"
+"B08-AMB","B08","Search","ambiguity","The system shall provide a search box that returns, within 1 second, all open and done tasks accessible to the user whose title or description contains the entered words, ignoring letter case, and shall display 'No tasks found' when there are no matches.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-12: Search covers only tasks the user can access.","ambiguity","unambiguity","unambiguity <= 2","revise","'entered words' can mean any word, all words, or the exact phrase"
+"B08-INC","B08","Search","incompleteness","The system shall provide a search box that returns the tasks matching the entered text.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-12: Search covers only tasks the user can access.","incompleteness","completeness","completeness <= 2","revise","removes fields searched, case rule, time and empty-result behaviour"
+"B08-NV","B08","Search","non_verifiability","The system shall provide a search box that returns the relevant open and done tasks accessible to the user in a fast way, and shall tell the user in a friendly manner when nothing matches.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-12: Search covers only tasks the user can access.","non_verifiability","verifiability","verifiability <= 2","revise","'relevant', 'fast' and 'friendly' are not measurable"
+"B08-CON","B08","Search","inconsistency","The system shall provide a search box that returns, within 1 second, all open, done, and deleted tasks accessible to the user whose title or description contains the entered text, ignoring letter case, and shall display 'No tasks found' when there are no matches.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-09: Deleted tasks are never shown in lists, search results, or reminders.
+CR-12: Search covers only tasks the user can access.","inconsistency","consistency","consistency <= 2","revise","including deleted tasks contradicts CR-09"
+"B09-O","B09","Sign-in lockout","original","The system shall lock a user account for 15 minutes after 5 consecutive failed sign-in attempts and shall display the message 'Too many attempts. Try again in 15 minutes' during the lock period.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-13: Users sign in with an e-mail address and a password.
+CR-14: A successful sign-in resets the user's failed-attempt counter to zero.","none","none","all criteria >= 4","accept","baseline requirement"
+"B09-AMB","B09","Sign-in lockout","ambiguity","The system shall lock a user account for 15 minutes after 5 failed sign-in attempts and shall display the message 'Too many attempts. Try again in 15 minutes' during the lock period.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-13: Users sign in with an e-mail address and a password.
+CR-14: A successful sign-in resets the user's failed-attempt counter to zero.","ambiguity","unambiguity","unambiguity <= 2","revise","without 'consecutive', failures may be cumulative or in a row"
+"B09-INC","B09","Sign-in lockout","incompleteness","The system shall lock a user account after failed sign-in attempts.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-13: Users sign in with an e-mail address and a password.
+CR-14: A successful sign-in resets the user's failed-attempt counter to zero.","incompleteness","completeness","completeness <= 2","revise","removes threshold, duration and message"
+"B09-NV","B09","Sign-in lockout","non_verifiability","The system shall lock a user account for a short time after several consecutive failed sign-in attempts and shall inform the user in a suitable way during the lock period.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-13: Users sign in with an e-mail address and a password.
+CR-14: A successful sign-in resets the user's failed-attempt counter to zero.","non_verifiability","verifiability","verifiability <= 2","revise","'short time', 'several' and 'suitable way' are not measurable"
+"B09-CON","B09","Sign-in lockout","inconsistency","The system shall lock a user account for 15 minutes after 5 failed sign-in attempts in total, without resetting the count after a successful sign-in, and shall display the message 'Too many attempts. Try again in 15 minutes' during the lock period.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-13: Users sign in with an e-mail address and a password.
+CR-14: A successful sign-in resets the user's failed-attempt counter to zero.","inconsistency","consistency","consistency <= 2","revise","not resetting the counter contradicts CR-14"
+"B10-O","B10","Share list","original","The owner of a list shall be able to share it with another registered user by e-mail address as either 'viewer' (read-only) or 'editor' (can create, edit, and complete tasks), and the system shall show the shared list to the invited user within 5 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-15: Viewers can never modify tasks.","none","none","all criteria >= 4","accept","baseline requirement"
+"B10-AMB","B10","Share list","ambiguity","The owner of a list shall be able to share it with another registered user by e-mail address as either 'viewer' (read-only) or 'editor' (can create, edit, and complete tasks and lists), and the system shall show the shared list to the invited user within 5 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-15: Viewers can never modify tasks.","ambiguity","unambiguity","unambiguity <= 2","revise","'tasks and lists' leaves open whether editors can create or delete lists"
+"B10-INC","B10","Share list","incompleteness","The owner of a list shall be able to share it with another registered user by e-mail address.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-15: Viewers can never modify tasks.","incompleteness","completeness","completeness <= 2","revise","removes roles and visibility time"
+"B10-NV","B10","Share list","non_verifiability","The owner of a list shall be able to share it with another registered user by e-mail address as either 'viewer' (read-only) or 'editor' (can create, edit, and complete tasks), and the system shall show the shared list to the invited user almost immediately.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-15: Viewers can never modify tasks.","non_verifiability","verifiability","verifiability <= 2","revise","'almost immediately' replaces the 5-second limit"
+"B10-CON","B10","Share list","inconsistency","The owner of a list shall be able to share it with another registered user by e-mail address as either 'viewer' (read-only, but can complete tasks) or 'editor' (can create, edit, and complete tasks), and the system shall show the shared list to the invited user within 5 seconds.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-04: A list has one owner and can be shared with other users as 'viewer' or 'editor'. Only the owner can delete a list or change its sharing.
+CR-15: Viewers can never modify tasks.","inconsistency","consistency","consistency <= 2","revise","viewers completing tasks contradicts CR-15"
+"B11-O","B11","Task list load time","original","The system shall return the first 50 tasks of any list within 1 second for at least 95% of requests, measured at the server over any 24-hour period, with up to 500 concurrent users.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-16: Company performance policy: every user-facing list request must have a 95th-percentile response time of at most 1 second.","none","none","all criteria >= 4","accept","baseline requirement"
+"B11-AMB","B11","Task list load time","ambiguity","The system shall return the first 50 tasks of any list within 1 second for at least 95% of requests with up to 500 users.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-16: Company performance policy: every user-facing list request must have a 95th-percentile response time of at most 1 second.","ambiguity","unambiguity","unambiguity <= 2","revise","'500 users' can be registered or concurrent, and the measurement point is unclear"
+"B11-INC","B11","Task list load time","incompleteness","The system shall return the first tasks of a list within 1 second.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-16: Company performance policy: every user-facing list request must have a 95th-percentile response time of at most 1 second.","incompleteness","completeness","completeness <= 2","revise","removes page size, percentile, measurement method and load"
+"B11-NV","B11","Task list load time","non_verifiability","The system shall return the tasks of a list fast and remain responsive for all expected users.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-16: Company performance policy: every user-facing list request must have a 95th-percentile response time of at most 1 second.","non_verifiability","verifiability","verifiability <= 2","revise","'fast' and 'responsive' are not measurable"
+"B11-CON","B11","Task list load time","inconsistency","The system shall return the first 50 tasks of any list within 3 seconds for at least 95% of requests, measured at the server over any 24-hour period, with up to 500 concurrent users.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-16: Company performance policy: every user-facing list request must have a 95th-percentile response time of at most 1 second.","inconsistency","consistency","consistency <= 2","revise","3 seconds violates CR-16 (at most 1 second at the 95th percentile)"
+"B12-O","B12","Account deletion","original","When a user requests account deletion and confirms it with their password, the system shall delete the account and all of the user's tasks and lists within 30 days of the confirmation and shall send a confirmation e-mail to the user's registered address once the deletion is complete.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.
+CR-13: Users sign in with an e-mail address and a password.","none","none","all criteria >= 4","accept","baseline requirement"
+"B12-AMB","B12","Account deletion","ambiguity","When a user requests account deletion and confirms it with their password, the system shall delete the account and all of the user's tasks and lists within 30 days of the request or its confirmation and shall send a confirmation e-mail to the user's registered address once the deletion is complete.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.
+CR-13: Users sign in with an e-mail address and a password.","ambiguity","unambiguity","unambiguity <= 2","revise","'of the request or its confirmation' gives two possible start times"
+"B12-INC","B12","Account deletion","incompleteness","When a user requests account deletion, the system shall delete the account.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.
+CR-13: Users sign in with an e-mail address and a password.","incompleteness","completeness","completeness <= 2","revise","removes confirmation, scope of data, deadline and notification"
+"B12-NV","B12","Account deletion","non_verifiability","When a user requests account deletion and confirms it with their password, the system shall delete the account and all related data promptly and shall notify the user in a suitable manner once this is done.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.
+CR-13: Users sign in with an e-mail address and a password.","non_verifiability","verifiability","verifiability <= 2","revise","'promptly' and 'suitable manner' are not measurable"
+"B12-CON","B12","Account deletion","inconsistency","When a user requests account deletion and confirms it with their password, the system shall delete the account, retain the user's tasks and lists for 6 months for analytics, and send a confirmation e-mail to the user's registered address once the account is deleted.","TaskFlow is a web to-do list application for individual users and small teams. Users sign in with an account, and tasks belong to lists.
+Related rules:
+CR-10: Data retention policy: user content must not be retained for more than 30 days after the user deletes it.
+CR-13: Users sign in with an e-mail address and a password.","inconsistency","consistency","consistency <= 2","revise","6-month retention contradicts CR-10 (30 days)"

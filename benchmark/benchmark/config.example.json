@@ -1,0 +1,25 @@
+{
+  "_leia_me": "Copie para config.json, preencha os model IDs EXATOS (sem 'latest') e exporte as chaves como variáveis de ambiente. Apague os modelos que não for usar.",
+  "repeticoes": {"P0": 3, "P1": 1, "P2": 1},
+  "modelos": [
+    {"label": "gemini", "provider": "openai_compat",
+     "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
+     "api_key_env": "GEMINI_API_KEY", "model": "PREENCHER_ID_EXATO",
+     "temperature": 0, "rpm": 10, "max_tokens": 2000},
+
+    {"label": "gpt-oss-120b", "provider": "openai_compat",
+     "base_url": "https://api.groq.com/openai/v1",
+     "api_key_env": "GROQ_API_KEY", "model": "PREENCHER_ID_EXATO",
+     "temperature": 0, "rpm": 25, "max_tokens": 2000,
+     "extra": {"reasoning_effort": "low"}},
+
+    {"label": "claude", "provider": "anthropic",
+     "api_key_env": "ANTHROPIC_API_KEY", "model": "PREENCHER_ID_EXATO",
+     "temperature": 0, "rpm": 30, "max_tokens": 1000},
+
+    {"label": "openai", "provider": "openai_compat",
+     "base_url": "https://api.openai.com/v1",
+     "api_key_env": "OPENAI_API_KEY", "model": "PREENCHER_ID_EXATO",
+     "temperature": null, "rpm": 30, "max_tokens": 2000}
+  ]
+}

@@ -1,0 +1,7 @@
+criterion,alpha_between_models
+completeness,0.6672008827702169
+unambiguity,0.5721406855255645
+verifiability,0.7095369739706452
+consistency,0.8941131794175767
+ALL,0.7397541795873315
+decision_pairwise_agreement,0.7888888888888888

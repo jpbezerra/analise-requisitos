@@ -1,0 +1,44 @@
+% sbc-template.sty -- reconstrucao do layout do modelo de artigos da SBC
+% (A4, Times 12pt, margens 3,5/2,5/3/3 cm, resumo/abstract recuados,
+% secoes numeradas em negrito). Se a disciplina/evento fornecer o
+% sbc-template.sty oficial, basta substituir este arquivo por ele.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{sbc-template}[2026/11/16 layout SBC]
+
+\RequirePackage{mathptmx}
+\RequirePackage[a4paper,top=3.5cm,bottom=2.5cm,left=3cm,right=3cm]{geometry}
+\RequirePackage[font=small,labelfont=bf,labelsep=period,skip=6pt]{caption}
+
+\setlength{\parindent}{1.27cm}
+\setlength{\parskip}{6pt}
+
+% titulo, autores e enderecos
+\renewcommand{\@maketitle}{%
+  \begin{center}
+    {\fontsize{16}{20}\selectfont\bfseries \@title \par}
+    \vskip 12pt
+    {\bfseries \@author \par}
+    \vskip 6pt
+    {\@address \par}
+    \vskip 6pt
+    {\small\ttfamily \@email \par}
+  \end{center}
+  \vskip 12pt}
+\def\@address{}\def\@email{}
+\newcommand{\address}[1]{\def\@address{#1}}
+\newcommand{\email}[1]{\def\@email{#1}}
+
+% resumo e abstract: italico, recuo de 0,8 cm dos dois lados
+\newenvironment{sbcbox}[1]{%
+  \list{}{\leftmargin=0.8cm\rightmargin=0.8cm}\item\relax
+  \itshape\textbf{\upshape #1.}~}{\endlist}
+\newenvironment{resumo}{\begin{sbcbox}{Resumo}}{\end{sbcbox}}
+\renewenvironment{abstract}{\begin{sbcbox}{Abstract}}{\end{sbcbox}}
+
+% secoes: 13pt negrito; subsecoes 12pt negrito; numero seguido de ponto
+\renewcommand{\section}{\@startsection{section}{1}{0pt}{12pt}{6pt}{\fontsize{13}{15}\selectfont\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}{12pt}{6pt}{\normalsize\bfseries}}
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+
+% referencias em corpo 12pt, sem recuo
+\renewcommand{\refname}{Refer\^encias}

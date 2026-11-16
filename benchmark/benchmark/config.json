@@ -1,0 +1,28 @@
+{
+  "_leia_me": "Tudo via OpenRouter. IDs e preços (US$/1M tokens entrada/saída) conferidos em openrouter.ai/models em 2026-11-15.",
+  "repeticoes": {"P0": 3, "P1": 1, "P2": 1},
+  "modelos": [
+    {"label": "claude", "provider": "openai_compat",
+     "base_url": "https://openrouter.ai/api/v1", "api_key_env": "OPENROUTER_API_KEY",
+     "model": "anthropic/claude-sonnet-5.5", "_preco": "2/10",
+     "temperature": 0, "rpm": 20, "max_tokens": 1000},
+
+    {"label": "openai", "provider": "openai_compat",
+     "base_url": "https://openrouter.ai/api/v1", "api_key_env": "OPENROUTER_API_KEY",
+     "model": "openai/gpt-5.6-terra", "_preco": "2/12",
+     "temperature": null, "rpm": 20, "max_tokens": 2000,
+     "extra": {"reasoning": {"effort": "low"}}},
+
+    {"label": "gemini", "provider": "openai_compat",
+     "base_url": "https://openrouter.ai/api/v1", "api_key_env": "OPENROUTER_API_KEY",
+     "model": "google/gemini-3.7-flash", "_preco": "0.75/3.75",
+     "temperature": 0, "rpm": 20, "max_tokens": 2000,
+     "extra": {"reasoning": {"effort": "low"}}},
+
+    {"label": "gpt-oss-120b", "provider": "openai_compat",
+     "base_url": "https://openrouter.ai/api/v1", "api_key_env": "OPENROUTER_API_KEY",
+     "model": "openai/gpt-oss-120b", "_preco": "0.15/0.6",
+     "temperature": 0, "rpm": 20, "max_tokens": 2000,
+     "extra": {"reasoning": {"effort": "low"}}}
+  ]
+}
