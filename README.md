@@ -64,7 +64,7 @@ Cada modelo devolve um JSON com notas de 1 a 5 em **completude, ausência de amb
 ## Estrutura
 
 ```
-benchmark/benchmark/
+benchmark/
 ├── corpus_requisitos.csv     # 60 itens com defeito injetado e gabarito
 ├── run_benchmark.py          # envia os itens aos modelos (só stdlib, retomável)
 ├── analise.py                # métricas, júri, IC bootstrap → resultados/
@@ -80,7 +80,7 @@ docs/
 ## Reproduzir
 
 ```bash
-cd benchmark/benchmark
+cd benchmark
 pip install pandas numpy matplotlib
 
 echo "OPENROUTER_API_KEY=sk-or-..." > .env          # lido automaticamente pelo script

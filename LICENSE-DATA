@@ -3,9 +3,9 @@ Creative Commons Attribution 4.0 International (CC BY 4.0)
 Copyright (c) 2026 jpbezerra
 
 The data and text in this repository are licensed under CC BY 4.0:
-  - benchmark/benchmark/corpus_requisitos.csv
-  - benchmark/benchmark/respostas_brutas/
-  - benchmark/benchmark/resultados/
+  - benchmark/corpus_requisitos.csv
+  - benchmark/respostas_brutas/
+  - benchmark/resultados/
   - docs/ (article text, figures and PDF)
 
 You are free to share and adapt this material for any purpose, including
