@@ -109,3 +109,8 @@ Coleta feita em 15 e 16/11/2026. Modelos proprietários mudam com o tempo, entã
 
 Só 12 requisitos-base, então os intervalos de confiança são largos. O estudo usa um domínio, um idioma (inglês) e uma redação de prompt.
 O corpus foi rascunhado com apoio de um LLM da mesma família de um dos juízes. Detalhes na seção *Ameaças à validade* do artigo.
+
+## Licença
+
+- **Código** (`*.py`, notebook, LaTeX): [MIT](LICENSE)
+- **Dados e texto** (corpus, respostas brutas, resultados, artigo e figuras): [CC BY 4.0](LICENSE-DATA)
