@@ -4,13 +4,13 @@
 
 ## Resumo
 
-Modelos de linguagem (LLMs) têm sido usados como juízes automáticos da qualidade de artefatos de software, mas pouco se sabe se identificam o defeito que de fato existe em um requisito e se mantêm o julgamento quando apenas a apresentação do texto muda. Este artigo apresenta um benchmark controlado com 12 requisitos-base de um aplicativo de tarefas, cada um acompanhado de quatro variantes com um único defeito injetado (ambiguidade, incompletude, falta de verificabilidade ou inconsistência). Quatro LLMs de famílias distintas e um júri formado por eles avaliaram os 60 itens sob repetição e duas perturbações superficiais, totalizando 1.200 julgamentos. Os modelos marcaram para revisão a maior parte das variantes defeituosas, mas nomearam corretamente o defeito com bem menos frequência: a inconsistência foi detectada em quase 100% dos casos, enquanto a falta de verificabilidade foi rotulada como ambiguidade em 48% das respostas. O calibre de exigência variou muito entre modelos: um deles pediu revisão de 92% dos requisitos corretos. Perturbações de formatação e de ordem tiveram efeito pequeno, distinguível do ruído apenas no modelo mais estável. O júri ficou próximo do melhor modelo em cada métrica, sem superá-lo. Os resultados indicam que LLMs são úteis como apoio à triagem de requisitos, mas não substituem a revisão humana na classificação dos defeitos.
+Modelos de linguagem (LLMs) já são investigados como avaliadores da qualidade de requisitos, mas ainda é importante testar se seus julgamentos acompanham defeitos introduzidos de forma controlada e resistem a mudanças superficiais na apresentação. Este artigo apresenta um benchmark com 12 requisitos-base de um aplicativo de tarefas, cada um acompanhado de quatro variantes com um defeito-alvo injetado (ambiguidade, incompletude, falta de verificabilidade ou inconsistência). Quatro LLMs de três famílias e um júri formado por eles avaliaram os 60 itens sob repetição e duas perturbações superficiais, totalizando 1.200 julgamentos individuais. Os modelos marcaram para revisão a maior parte das variantes, mas nomearam corretamente o defeito-alvo com menos frequência: a inconsistência foi rotulada corretamente em quase 100% dos casos, enquanto a falta de verificabilidade foi rotulada como ambiguidade em 48% das respostas nas cinco condições. O rigor variou muito: um modelo pediu revisão de 92% dos originais. Na comparação pareada com o ruído entre repetições, o efeito das perturbações sobre a nota apareceu no Claude e, para a mudança de ordem, no júri. Os resultados indicam utilidade para triagem, mas não dispensam revisão humana do diagnóstico nem validação independente do gabarito.
 
 **Palavras-chave:** engenharia de requisitos; qualidade de requisitos; LLM-as-a-Judge; robustez; júri de modelos.
 
 ## Abstract
 
-Large language models (LLMs) are increasingly used as automatic judges of software artifacts, yet it is unclear whether they identify the defect actually present in a requirement and whether their judgment holds when only the presentation of the text changes. This paper presents a controlled benchmark with 12 base requirements of a to-do application, each paired with four variants containing a single injected defect (ambiguity, incompleteness, non-verifiability or inconsistency). Four LLMs from different families, and a jury aggregating them, evaluated the 60 items under repetition and two surface perturbations, for a total of 1,200 judgments. The models flagged most defective variants for revision but named the defect correctly far less often: inconsistency was detected in almost every case, whereas non-verifiability was labeled as ambiguity in 48% of the answers. Strictness varied widely: one model asked to revise 92% of the correct requirements. Formatting and ordering perturbations had a small effect, distinguishable from noise only for the most stable model. The jury stayed close to the best model on every metric without surpassing it. LLMs are useful for triaging requirements, but they do not replace human review when classifying defects.
+Large language models (LLMs) have already been studied as requirements-quality evaluators, but their response to controlled defects and superficial presentation changes remains important to test. This paper presents a benchmark with 12 base requirements of a to-do application, each paired with four variants containing a target injected defect (ambiguity, incompleteness, non-verifiability or inconsistency). Four LLMs from three model families, and a jury aggregating them, evaluated the 60 items under repetition and two surface perturbations, for 1,200 individual judgments. The models flagged most variants for revision but named the target defect correctly less often: inconsistency was labeled correctly almost always, whereas non-verifiability was labeled as ambiguity in 48% of responses across all five conditions. Strictness varied widely: one model asked to revise 92% of the originals. In a paired comparison against repeat-run noise, the score effect appeared for Claude and, under reordered context, for the jury. LLMs may support triage, but human review of the diagnosis and independent validation of the answer key remain necessary.
 
 **Keywords:** requirements engineering; requirements quality; LLM-as-a-Judge; robustness; LLM jury.
 
@@ -20,14 +20,14 @@ Modelos de linguagem vêm sendo aplicados em diversas atividades da Engenharia d
 
 A literatura já mostra que juízes LLM favorecem a fluência e a verbosidade [Zhou et al. 2024], são sensíveis à escala de pontuação [Fujinuma 2025] e aceitam bem respostas válidas, mas rejeitam mal as inválidas [Jain et al. 2025]. Para requisitos de software, isso levanta duas questões práticas. A primeira é se o modelo identifica o defeito que realmente existe no requisito, e não apenas se concorda com outro avaliador. A segunda é se o julgamento se mantém quando só a apresentação muda, por exemplo quando o texto chega formatado de outro modo.
 
-Este trabalho investiga essas questões com um benchmark controlado. Para cada requisito-base correto, são criadas variantes que introduzem um único defeito conhecido. Como o defeito é injetado deliberadamente, a resposta esperada é conhecida de antemão, e o estudo não depende de tratar o julgamento humano como padrão-ouro perfeito [Nordin et al. 2017]. A pergunta de pesquisa é: *como diferentes LLMs identificam defeitos de qualidade em requisitos de software e quão robustos são seus julgamentos diante de repetições e de alterações superficiais no texto?* Ela se desdobra em quatro subperguntas:
+Este trabalho investiga essas questões com um benchmark controlado. Para cada requisito-base considerado correto pelos autores, são criadas variantes com um defeito-alvo deliberado. Isso fornece um gabarito operacional sem tratar a avaliação humana como padrão-ouro perfeito [Nordin et al. 2017], mas não garante que cada item contenha apenas uma falha; essa hipótese exige validação independente. A pergunta de pesquisa é: *como diferentes LLMs identificam defeitos de qualidade em requisitos de software e quão robustos são seus julgamentos diante de repetições e de alterações superficiais no texto?* Ela se desdobra em quatro subperguntas:
 
 - **RQ1.** Quão sensíveis são diferentes LLMs a defeitos específicos de qualidade em requisitos?
 - **RQ2.** A avaliação permanece consistente quando somente a formatação ou a ordem do contexto são alteradas?
 - **RQ3.** Um júri de múltiplos LLMs é mais robusto do que um modelo individual?
 - **RQ4.** Quais dimensões de qualidade são mais difíceis de avaliar?
 
-As contribuições são: (i) um corpus de 60 itens com defeitos controlados e gabarito explícito; (ii) um protocolo replicável que separa o efeito de perturbações do ruído entre repetições; e (iii) uma comparação empírica entre quatro LLMs de famílias distintas e um júri. Corpus, prompts, scripts e respostas brutas são disponibilizados para replicação.
+As contribuições são: (i) um corpus de 60 itens com defeitos-alvo injetados e gabarito operacional explícito; (ii) um protocolo replicável que compara o efeito de perturbações ao ruído entre repetições nos mesmos itens; e (iii) uma comparação empírica entre quatro LLMs de três famílias e um júri. Corpus, prompts, scripts e respostas brutas são disponibilizados para replicação.
 
 ## 2. Trabalhos relacionados
 
@@ -39,15 +39,23 @@ As contribuições são: (i) um corpus de 60 itens com defeitos controlados e ga
 
 **Júris e decision models.** Verga et al. (2024) mostraram que um painel de modelos menores, de famílias diferentes, supera um juiz grande a um custo mais de sete vezes menor. Trabalhos posteriores propõem destilar o júri [Tang et al. 2025], selecionar juízes por instância [Li et al. 2025b] ou por similaridade [Yang 2025]. Williams et al. (2025), por outro lado, encontraram ganho do júri em apenas um de onze critérios clínicos. Li et al. (2026) avaliam um decision model que retorna vereditos com probabilidades a uma fração do custo, mas com perdas em respostas incorretas bem redigidas.
 
-**Lacuna.** Não identificamos, nos trabalhos analisados, um benchmark que introduza defeitos conhecidos em requisitos de software e use esses pares para medir sensibilidade, estabilidade e resistência a perturbações superficiais, comparando juízes individuais e júri.
+**Posicionamento e lacuna.** A avaliação de qualidade de requisitos por LLMs não é inédita. Shefa et al. (2026) comparam dez modelos com um gabarito de especialistas, dois conjuntos de requisitos, repetições e temperaturas; Paiva et al. (2026) usam um juiz LLM para atributos da ISO 29148 em requisitos gerados de títulos de issues. Nosso diferencial é combinar pares original–variante com defeito-alvo, duas mudanças de apresentação, comparação pareada com ruído e um júri de modelos. A Tabela 0 delimita essa contribuição; ela não estabelece superioridade metodológica nem dispensa a validação humana do corpus.
+
+**Tabela 1 – Posicionamento frente aos estudos mais próximos**
+
+| Estudo | Desenho da avaliação | Diferença deste estudo |
+| --- | --- | --- |
+| Shefa et al. (2026) | Dez LLMs; gabarito de especialistas; dois conjuntos de requisitos; repetições e temperaturas. | Pares original–variante, perturbações de apresentação e júri. |
+| Paiva et al. (2026) | Requisitos gerados de títulos de issues; juiz LLM com atributos da ISO 29148; validação humana amostral. | Foco na confiabilidade do avaliador, não na qualidade da geração. |
+| Este estudo | 12 requisitos-base, 48 variantes, quatro modelos, duas perturbações e júri. | Separa sinal de defeito, decisão de revisão e estabilidade, em um domínio sintético. |
 
 ## 3. Metodologia
 
 ### 3.1 Corpus
 
-O corpus descreve o TaskFlow, um aplicativo web de lista de tarefas. São 12 requisitos-base, redigidos em inglês no formato "The system shall...", cobrindo criação, conclusão e edição de tarefas, lembretes, listas, lixeira, ordenação, busca, bloqueio de login, compartilhamento, desempenho e exclusão de conta. Cada base tem quatro variantes, e cada variante introduz um único defeito (Tabela 1), totalizando 60 itens.
+O corpus descreve o TaskFlow, um aplicativo web de lista de tarefas. São 12 requisitos-base redigidos em inglês como enunciados de requisitos, cobrindo criação, conclusão e edição de tarefas, lembretes, listas, lixeira, ordenação, busca, bloqueio de login, compartilhamento, desempenho e exclusão de conta. Cada base tem quatro variantes com um defeito-alvo injetado (Tabela 2), totalizando 60 itens.
 
-**Tabela 1 – Defeitos injetados**
+**Tabela 2 – Defeitos injetados**
 
 | Defeito | Critério afetado | Como é introduzido |
 | --- | --- | --- |
@@ -64,9 +72,9 @@ Os modelos avaliam cada requisito em quatro critérios, com notas inteiras de 1 
 
 ### 3.3 Modelos e condições
 
-Foram avaliados quatro modelos de famílias distintas, todos acessados pelo OpenRouter em 15 e 16 de novembro de 2026 (Tabela 2).
+Foram avaliados quatro modelos de três famílias (Anthropic, Google e OpenAI), todos acessados pelo OpenRouter em 15 e 16 de novembro de 2026 (Tabela 3). GPT-5.6-terra e gpt-oss-120b são contados separadamente como modelos, mas pertencem à mesma família de fornecedor.
 
-**Tabela 2 – Modelos avaliados**
+**Tabela 3 – Modelos avaliados**
 
 | Modelo | Identificador | Temperatura | Raciocínio |
 | --- | --- | --- | --- |
@@ -79,7 +87,7 @@ Cada item foi consultado cinco vezes por modelo: três repetições na apresenta
 
 ### 3.4 Métricas
 
-Para RQ1: detecção exata (defeito apontado igual ao injetado), proporção de variantes marcadas para revisão, especificidade (originais aceitos), macro-F1 em cinco classes, queda de nota no critério afetado (original menos variante) e erro em relação à faixa esperada. Para RQ2: concordância entre as três repetições (decisão, defeito e alfa de Krippendorff) e variação absoluta de nota e taxa de troca de decisão entre P0 e P1 e entre P0 e P2, **comparadas ao ruído entre duas repetições idênticas**. Para RQ3: as mesmas métricas para o júri e alfa de Krippendorff entre modelos. Para RQ4: ordenação das dimensões pela queda de nota. Os intervalos de confiança de 95% são obtidos por bootstrap percentil (2.000 reamostragens) sobre os 12 requisitos-base, a unidade independente.
+Para RQ1: acerto do rótulo (defeito apontado igual ao injetado, independentemente da decisão), acerto estrito (rótulo correto **e** decisão “revisar”), proporção de variantes marcadas para revisão, especificidade (originais aceitos), macro-F1 em cinco classes, queda de nota no critério afetado (original menos variante) e erro em relação à faixa esperada. Para RQ2: concordância entre as três repetições (decisão, defeito e alfa de Krippendorff) e variação absoluta de nota e taxa de troca de decisão entre P0 e P1 e entre P0 e P2. Para cada item, a diferença entre a mudança sob P1/P2 e o ruído P0-repetição 1 versus P0-repetição 2 é agregada por requisito-base; um IC da diferença que não inclua zero sugere efeito distinguível do ruído sob este protocolo. Para RQ3: as mesmas métricas para o júri e alfa de Krippendorff entre modelos. Para RQ4: ordenação das dimensões pela queda de nota. Os intervalos de confiança de 95% são obtidos por bootstrap percentil (2.000 reamostragens) sobre os 12 requisitos-base, a unidade independente.
 
 ## 4. Resultados
 
@@ -87,15 +95,15 @@ As 1.200 respostas foram válidas, sem falhas técnicas após as novas tentativa
 
 ### 4.1 RQ1: sensibilidade aos defeitos
 
-**Os modelos percebem o problema com mais facilidade do que o nomeiam.** Em inconsistência e falta de verificabilidade, Claude, GPT-5.6-terra e Gemini marcaram para revisão entre 94% e 100% das variantes; em incompletude, todos os modelos ficaram entre 81% e 92%. A ambiguidade foi a exceção: 75% no Claude, 56% no Gemini e 33% [11%; 58%] no gpt-oss-120b. A detecção exata variou muito por defeito (Figura 1).
+**Os modelos percebem o problema com mais facilidade do que o nomeiam.** Em inconsistência e falta de verificabilidade, Claude, GPT-5.6-terra e Gemini marcaram para revisão entre 94% e 100% das variantes; em incompletude, todos os modelos ficaram entre 81% e 92%. A ambiguidade foi a exceção: 75% no Claude, 56% no Gemini e 33% [11%; 58%] no gpt-oss-120b. O acerto do rótulo variou muito por defeito (Figura 1). Essa figura e o macro-F1 usam o rótulo, não a decisão. Em 14 das 1.200 respostas individuais, houve rótulo de defeito junto com a decisão “aceitar” (10 em P0); por isso, a tabela de sensibilidade também apresenta o acerto estrito, que exige “revisar”.
 
-![Figura 1 – Detecção exata do defeito injetado, por modelo e por tipo de defeito.](latex/figuras/fig1_deteccao.png)
+![Figura 1 – Acerto do rótulo do defeito-alvo, independentemente da decisão de aceitar ou revisar, por modelo e tipo de defeito.](latex/figuras/fig1_deteccao.png)
 
-A falta de verificabilidade teve o maior descompasso: os modelos quase sempre pediram revisão, mas, somando os quatro, 48% das respostas rotularam o defeito como ambiguidade e só 31% como falta de verificabilidade (Figura 2). Termos como "rapidamente" e "amigável" são lidos como ambíguos, o que aponta uma fronteira pouco nítida entre os dois rótulos no rubric. Por outro lado, 33% das respostas às variantes ambíguas não apontaram defeito algum.
+A falta de verificabilidade teve o maior descompasso: os modelos quase sempre pediram revisão, mas, somando os quatro modelos e as cinco condições, 48% das respostas rotularam o defeito como ambiguidade e só 31% como falta de verificabilidade (Figura 2). Termos como "rapidamente" e "amigável" são lidos como ambíguos, o que aponta uma fronteira pouco nítida entre os dois rótulos no rubric. Por outro lado, 33% das respostas às variantes ambíguas não apontaram defeito algum nesse mesmo conjunto de condições. As demais métricas de RQ1 usam apenas P0.
 
-![Figura 2 – Defeito injetado (linhas) × defeito apontado (colunas), em % das respostas de cada linha, somando os quatro modelos.](latex/figuras/fig5_confusao.png)
+![Figura 2 – Defeito injetado (linhas) × defeito apontado (colunas), em % das respostas de cada linha, somando quatro modelos e cinco condições (P0 repetido três vezes, P1 e P2).](latex/figuras/fig5_confusao.png)
 
-**O calibre de exigência varia muito entre modelos (Figura 3).** Gemini (especificidade 1,00), gpt-oss-120b (0,94) e Claude (0,92) aceitaram quase todos os originais. O GPT-5.6-terra pediu revisão de 92% deles (especificidade 0,08 [0,00; 0,17]), apontando lacunas menores, como o ponto de início da contagem de um limite de 2 segundos, em geral rotuladas como ambiguidade. Isso explica a sua maior detecção exata de ambiguidade (0,81). O gpt-oss-120b fica no extremo oposto, com a maior taxa de falsos negativos (0,29). O macro-F1 foi maior no Gemini (0,68) e no júri (0,68), seguidos de Claude (0,64), GPT-5.6-terra (0,56) e gpt-oss-120b (0,49).
+**O calibre de exigência varia muito entre modelos (Figura 3).** Gemini (especificidade 1,00), gpt-oss-120b (0,94) e Claude (0,92) aceitaram quase todos os originais. O GPT-5.6-terra pediu revisão de 92% deles (especificidade 0,08 [0,00; 0,17]), apontando lacunas menores, como o ponto de início da contagem de um limite de 2 segundos, em geral rotuladas como ambiguidade. Esse maior rigor acompanha seu maior acerto do rótulo de ambiguidade (0,81), mas não demonstra uma relação causal. O gpt-oss-120b fica no extremo oposto, com a maior taxa de falsos negativos (0,29). O macro-F1 foi maior no Gemini (0,68) e no júri (0,68), seguidos de Claude (0,64), GPT-5.6-terra (0,56) e gpt-oss-120b (0,49).
 
 ![Figura 3 – Taxa de falsos positivos (originais marcados para revisão) × taxa de falsos negativos (variantes aceitas).](latex/figuras/fig2_fp_fn.png)
 
@@ -105,7 +113,7 @@ Todos os modelos reduziram a nota no critério afetado (Figura 5). No erro em re
 
 O Claude foi o mais estável entre repetições: mesma decisão em 100% dos itens, mesmo defeito em 98% e alfa de 0,98. Seguiram-se Gemini (decisão 97%; alfa 0,97), GPT-5.6-terra (93%; 0,90) e gpt-oss-120b (88%; 0,83), este último com o mesmo defeito em só 75% dos itens, apesar da temperatura 0.
 
-As perturbações mudaram a nota em menos de 0,5 ponto em média (Figura 4). Para GPT-5.6-terra, Gemini e gpt-oss-120b, o efeito fica dentro do ruído entre repetições. A exceção é o Claude: com ruído de 0,05, a formatação elevou a variação para 0,13 e a mudança de ordem para 0,20, trocando a decisão em 8% [2%; 17%] dos itens e o defeito apontado em 12%, contra 2% entre repetições. O efeito das perturbações só se torna visível no modelo cujo ruído próprio é baixo.
+As perturbações mudaram a nota em menos de 0,5 ponto em média (Figura 4). No contraste pareado por requisito-base, a diferença média entre a variação sob perturbação e o ruído ficou acima de zero para Claude em P1 (0,079; IC 95% [0,054; 0,108]) e P2 (0,146; [0,092; 0,204]), e para o júri em P2 (0,063; [0,021; 0,106]). Para GPT-5.6-terra, Gemini e gpt-oss-120b, os intervalos das diferenças incluem zero. Esses resultados são exploratórios com apenas 12 bases e não equivalem a afirmar ausência de efeito nos demais modelos. A troca de decisão sob P2 no Claude excedeu o ruído em 0,083 [0,017; 0,167].
 
 ![Figura 4 – Variação absoluta média de nota entre repetições (Rep.), com formatação alterada (P1) e com ordem alterada (P2). A faixa cinza é o IC 95% do ruído.](latex/figuras/fig4_robustez.png)
 
@@ -123,7 +131,7 @@ A queda média de nota no critério afetado ordena as dimensões da mais difíci
 
 ## 5. Discussão
 
-**Triagem sim, diagnóstico com cautela.** Os modelos são bons em separar requisitos com problema de requisitos corretos, desde que se escolha um modelo calibrado. São menos confiáveis para dizer qual é o problema, exceto quando ele contradiz uma regra explícita. Para uso prático, isso sugere empregar LLMs como filtro de primeira passagem, com o diagnóstico final feito por um analista.
+**Triagem sim, diagnóstico com cautela.** Neste corpus sintético, alguns modelos separaram bem variantes de originais segundo o gabarito operacional; o desempenho dependeu fortemente do modelo. O diagnóstico do tipo de defeito foi menos confiável, exceto quando houve contradição com regra explícita. Para uso prático, isso sugere testar LLMs como filtro de primeira passagem, com o diagnóstico final feito por um analista e validação em dados reais.
 
 **Concordância não é acerto.** O achado de Jain et al. (2025), de que juízes aceitam bem e rejeitam mal, não se repetiu de forma uniforme: aqui, um modelo rejeitou quase tudo e outro aceitou demais. O ponto em comum é que o calibre de cada modelo precisa ser medido com pares correto/defeituoso, e não inferido da concordância com outros juízes.
 
@@ -135,11 +143,11 @@ A queda média de nota no critério afetado ordena as dimensões da mais difíci
 
 ## 6. Ameaças à validade
 
-**Validade interna.** O corpus foi construído pelos pesquisadores, com apoio de um LLM da mesma família de um dos juízes (Claude), o que pode favorecê-lo. Três bases foram corrigidas após a execução-piloto; a correção se limitou a contradições e omissões objetivas em relação às regras do contexto. As variantes incompletas são mais curtas por construção. **Validade de construto.** O gabarito é operacional e assume que cada variante tem só o defeito injetado; a sobreposição entre ambiguidade e falta de verificabilidade mostra que essa separação nem sempre é nítida. **Validade de conclusão.** Com 12 requisitos-base, os intervalos de confiança são largos, e diferenças pequenas entre modelos não são conclusivas. **Validade externa.** Um único domínio, idioma (inglês) e redação de prompt foram usados, e todos os modelos foram acessados por um único intermediário. Modelos proprietários mudam com o tempo; os resultados valem para as versões e datas registradas.
+**Validade interna.** O corpus foi construído pelos pesquisadores, com apoio de um LLM da mesma família de um dos juízes (Claude), o que pode favorecê-lo. Três bases foram corrigidas após a execução-piloto; a correção se limitou a contradições e omissões objetivas em relação às regras do contexto. As variantes incompletas são mais curtas por construção. **Validade de construto.** O gabarito é operacional, não foi validado por avaliadores independentes e assume que cada variante tem só o defeito-alvo. Uma auditoria prévia levantou dúvidas específicas em B07-AMB e B11-AMB (possível incompletude junto à ambiguidade) e B06-AMB; elas devem ser adjudicadas antes da submissão, sem alterar retroativamente a coleta. A sobreposição entre ambiguidade e falta de verificabilidade também mostra que a taxonomia não é perfeitamente separável. **Validade de conclusão.** Com 12 requisitos-base, os intervalos são largos, e múltiplos contrastes foram examinados sem ajuste formal para multiplicidade; os resultados inferenciais são exploratórios. **Validade externa.** Um único domínio, idioma (inglês) e redação de prompt foram usados, e todos os modelos foram acessados por um único intermediário. Modelos proprietários mudam com o tempo; os resultados valem para as versões e datas registradas.
 
 ## 7. Conclusão
 
-Este trabalho apresentou um benchmark controlado para avaliar LLMs como juízes da qualidade de requisitos. Os quatro modelos avaliados perceberam a maioria dos defeitos, mas nomearam corretamente o defeito com frequência bem menor, exceto em inconsistências explícitas. A ambiguidade foi a dimensão mais difícil. O calibre de exigência variou do excesso de rigor ao excesso de aceitação, e mudanças superficiais no prompt tiveram efeito pequeno. O júri ficou perto do melhor modelo em todas as métricas, sem superá-lo.
+Este trabalho apresentou um benchmark controlado para avaliar LLMs como juízes da qualidade de requisitos. Os quatro modelos avaliados perceberam a maioria dos defeitos-alvo, mas nomearam corretamente o rótulo com frequência bem menor, exceto em inconsistências explícitas. A ambiguidade foi a dimensão mais difícil. O rigor variou do excesso de exigência ao excesso de aceitação. Mudanças superficiais tiveram efeito pequeno em média, mas distinguível do ruído no Claude e, para P2, no júri. O júri ofereceu um compromisso entre métricas, sem dominar todos os modelos individuais.
 
 Como trabalhos futuros, propõem-se: ampliar o corpus para outros domínios e idiomas; testar variações de prompt e rubrics com exemplos de fronteira entre categorias; avaliar regras de agregação do júri e júris dinâmicos [Li et al. 2025b]; incluir decision models como o Jev [Li et al. 2026]; e estudar avaliadores humanos para comparar o calibre dos modelos com o de analistas.
 
@@ -147,46 +155,50 @@ Como trabalhos futuros, propõem-se: ampliar o corpus para outros domínios e id
 
 ## Referências
 
-Almeida et al. (2025). [Comparação entre ChatGPT-4 e DeepSeek-V3 na extração de requisitos a partir de entrevistas]. DOI: 10.29327/1588952.28-12.
+Almeida, C., Copque, I., Oliveira, A., Arouca, M., Barbosa, A., Freire, S., Mendonça, M., and Leite, J. C. (2025). From Elicitation Interviews to Software Requirements: Evaluating LLM Performance in Requirement Generation. In *Proceedings of WER 2025*. DOI: 10.29327/1588952.28-12.
 
-Badshah and Sajjad (2024). Reference-guided verdict: LLMs-as-judges in automatic evaluation of free-form text. arXiv:2408.09235.
+Badshah, S., and Sajjad, H. (2024). Reference-Guided Verdict: LLMs-as-Judges in Automatic Evaluation of Free-Form QA. arXiv:2408.09235.
 
-Fujinuma (2025). [Score range bias in LLM judges]. arXiv:2510.18196.
+Fujinuma, Y. (2025). Contrastive Decoding Mitigates Score Range Bias in LLM-as-a-Judge. arXiv:2510.18196.
 
 Glinz (2000). Improving the quality of requirements with scenarios. In *Proc. 2nd World Congress for Software Quality (2WCSQ)*, Yokohama, p. 55–60.
 
 ISO/IEC/IEEE (2018). ISO/IEC/IEEE 29148:2018 – Systems and software engineering – Life cycle processes – Requirements engineering. DOI: 10.1109/IEEESTD.2018.8559686.
 
-Jain et al. (2025). Beyond consensus: [LLM judges and the rejection of invalid answers]. arXiv:2510.11822.
+Jain, S., Ahmed, U. Z., Sahai, S., and Leong, B. (2025). Beyond Consensus: Mitigating the Agreeableness Bias in LLM Judge Evaluations. arXiv:2510.11822.
 
 Li, Li and Huang (2025a). Judging with confidence: calibrating autoraters to preference distributions. arXiv:2510.00263.
 
-Li, Wang and Gouda (2025b). Jury-on-Demand: [dynamic LLM juries]. arXiv:2512.01786.
+Li, X., Wang, K., Gouda, G., et al. (2025b). Who Judges the Judge? LLM Jury-on-Demand: Building Trustworthy LLM Evaluation Systems. arXiv:2512.01786.
 
-Li, Miao, Krishnan and Padman (2026). JEV-as-a-Judge. arXiv:2609.26550 (preprint).
+Li, Y., Miao, Y., Krishnan, R., and Padman, R. (2026). JEV-as-a-Judge: Accept When Confident, Escalate When Unsure. arXiv:2609.26550 (preprint).
 
 Marques, Silva and Bernardino (2024). Using ChatGPT in software requirements engineering: a comprehensive review. *Future Internet*, 16(6), 180. DOI: 10.3390/fi16060180.
 
 Montgomery, Fucci and Bouraffa (2022). Empirical research on requirements quality: a systematic mapping study. *Requirements Engineering*, 27, 183–209. DOI: 10.1007/s00766-021-00367-z.
 
-Nordin, Ahmad Zaidi and Mazlan (2017). [Measuring software requirements specification quality]. *Journal of Telecommunication, Electronic and Computer Engineering*, 9(3-5), 115–121.
+Nordin, A., Ahmad Zaidi, N. H., and Mazlan, N. A. (2017). Measuring Software Requirements Specification Quality. *Journal of Telecommunication, Electronic and Computer Engineering*, 9(3-5), 123–128.
 
-Pasquale et al. (2025). [LLM-generated functional specifications in an industrial consulting project]. In *Proc. IEEE RE 2025*. DOI: 10.1109/RE63999.2025.00045.
+Paiva, G., Canedo, E. D., and Rocha Filho, G. P. (2026). From issue titles to requirements: an empirical study of large language models and prompt engineering strategies. *Requirements Engineering*, 31, article 7. DOI: 10.1007/s00766-026-00462-z.
 
-Sahu, Rai and Roshan (2024). [NLP framework for ISO/IEC/IEEE 29148 requirement characteristics]. In *Proc. ASME IDETC-CIE 2024*. DOI: 10.1115/detc2024-139583.
+Pasquale, L., Ragone, A., Piemontese, E., and Darban, A. A. (2025). Exploring the Use of LLMs for Requirements Specification in an IT Consulting Company. In *Proc. IEEE RE 2025*, pp. 389–399. DOI: 10.1109/RE63999.2025.00045.
 
-Silva et al. (2025). [Revisão sistemática sobre LLMs na Engenharia de Requisitos]. DOI: 10.29327/1588952.28-18.
+Sahu, C. K., Rai, V., and Roshan, V. (2024). Well-Formed Quality of System Requirements for Verifying to ISO 29148-2018: A Natural Language Processing (NLP) Based Framework and Quantitative Metric. In *Proc. ASME IDETC-CIE 2024*. DOI: 10.1115/DETC2024-139583.
 
-Tang, Feng and Wang (2025). [Distilling multi-judge evaluation into a single model]. arXiv:2508.00454.
+Shefa, J., Salado, A., Wach, P., and Topcu, T. G. (2026). Two Truths and A Lie? Benchmarking Off-the-Shelf LLMs for Requirements Quality Assessment: Performance, False Alarms, and Misses. arXiv:2609.03230 (preprint). DOI: 10.48550/arXiv.2609.03230.
+
+Silva, Y., Gois, M., Santos, A., Castro, J., and Lencastre, M. (2025). Uso de Large Language Models na Engenharia de Requisitos. In *Proceedings of WER 2025*. DOI: 10.29327/1588952.28-18.
+
+Tang, Y., Feng, K., Wang, Y., et al. (2025). Learning an Efficient Multi-Turn Dialogue Evaluator from Multiple LLM Judges. arXiv:2508.00454.
 
 Verga, Hofstatter, Althammer et al. (2024). Replacing judges with juries: evaluating LLM generations with a panel of diverse models. arXiv:2404.18796.
 
-Williams et al. (2025). [LLM juries vs. clinicians in global health evaluation]. medRxiv. DOI: 10.1101/2025.10.27.25338910.
+Williams, G., Rutunda, S., Nzabakira, F., and Mateen, B. A. (2025). Human Evaluators vs. LLM-as-a-Judge: Toward Scalable, Real-Time Evaluation of GenAI in Global Health. *medRxiv* (preprint). DOI: 10.1101/2025.10.27.25338910.
 
-Yamani, Baslyman and Ahmed (2025). [Responsible-AI values of 23 LLMs in requirements engineering tasks]. In *Proc. AIware 2025*. DOI: 10.1109/aiware69974.2025.00022.
+Yamani, A., Baslyman, M., and Ahmed, M. (2025). Are We Aligned? A Preliminary Investigation of the Alignment of Responsible AI Values between LLMs and Human Judgment. In *Proc. AIware 2025*, pp. 133–142. DOI: 10.1109/AIware69974.2025.00022.
 
-Yang (2025). [Panel selection for LLM judges via cross-evaluation]. DOI: 10.65286/icic.v21i4.11558.
+Yang, Z. (2025). LLM Evaluation Panel Selection Based on Cross Assessment and Similarity Matrix. DOI: 10.65286/icic.v21i4.11558.
 
-Zhou, Huang and Long (2024). [Superficial quality bias in LLM judges]. arXiv:2409.16788.
+Zhou, H., Huang, H., Long, Y., et al. (2024). Mitigating the Bias of Large Language Model Evaluation. arXiv:2409.16788.
 
-*Nota: os títulos entre colchetes e os prenomes dos autores ainda precisam ser conferidos nos DOIs e completados antes da entrega.*
+*Antes da submissão, conferir a normalização final das referências conforme as normas do evento e revisar os metadados que não tenham sido extraídos diretamente da editora.*

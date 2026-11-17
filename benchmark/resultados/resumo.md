@@ -5,28 +5,28 @@ Intervalos: bootstrap percentil 95% sobre os requisitos-base. 'JURY' = agregaç�
 
 ## 01_sensibilidade_por_defeito (RQ1, RQ4)
 
-| model | defect | exact_detection | exact_lo | exact_hi | flagged_revise | flag_lo | flag_hi |
-|---|---|---|---|---|---|---|---|
-| JURY | ambiguity | 0.639 | 0.417 | 0.861 | 0.833 | 0.583 | 1.000 |
-| JURY | incompleteness | 0.611 | 0.361 | 0.861 | 0.833 | 0.583 | 1.000 |
-| JURY | non_verifiability | 0.333 | 0.111 | 0.556 | 1.000 | 1.000 | 1.000 |
-| JURY | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
-| claude | ambiguity | 0.500 | 0.250 | 0.750 | 0.750 | 0.500 | 1.000 |
-| claude | incompleteness | 0.667 | 0.417 | 0.917 | 0.833 | 0.583 | 1.000 |
-| claude | non_verifiability | 0.250 | 0.000 | 0.500 | 1.000 | 1.000 | 1.000 |
-| claude | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
-| gemini | ambiguity | 0.389 | 0.167 | 0.639 | 0.556 | 0.278 | 0.833 |
-| gemini | incompleteness | 0.639 | 0.389 | 0.889 | 0.833 | 0.583 | 1.000 |
-| gemini | non_verifiability | 0.472 | 0.194 | 0.750 | 0.944 | 0.833 | 1.000 |
-| gemini | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
-| gpt-oss-120b | ambiguity | 0.222 | 0.056 | 0.417 | 0.333 | 0.111 | 0.583 |
-| gpt-oss-120b | incompleteness | 0.639 | 0.389 | 0.861 | 0.806 | 0.583 | 1.000 |
-| gpt-oss-120b | non_verifiability | 0.028 | 0.000 | 0.083 | 0.722 | 0.472 | 0.944 |
-| gpt-oss-120b | inconsistency | 0.944 | 0.833 | 1.000 | 1.000 | 1.000 | 1.000 |
-| openai | ambiguity | 0.806 | 0.667 | 0.944 | 0.944 | 0.833 | 1.000 |
-| openai | incompleteness | 0.667 | 0.417 | 0.889 | 0.917 | 0.750 | 1.000 |
-| openai | non_verifiability | 0.417 | 0.167 | 0.667 | 1.000 | 1.000 | 1.000 |
-| openai | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| model | defect | exact_detection | exact_lo | exact_hi | exact_and_revise | strict_lo | strict_hi | flagged_revise | flag_lo | flag_hi |
+|---|---|---|---|---|---|---|---|---|---|---|
+| JURY | ambiguity | 0.639 | 0.417 | 0.861 | 0.639 | 0.389 | 0.861 | 0.833 | 0.583 | 1.000 |
+| JURY | incompleteness | 0.611 | 0.361 | 0.861 | 0.611 | 0.361 | 0.861 | 0.833 | 0.583 | 1.000 |
+| JURY | non_verifiability | 0.333 | 0.111 | 0.556 | 0.333 | 0.111 | 0.556 | 1.000 | 1.000 | 1.000 |
+| JURY | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| claude | ambiguity | 0.500 | 0.250 | 0.750 | 0.417 | 0.167 | 0.667 | 0.750 | 0.500 | 1.000 |
+| claude | incompleteness | 0.667 | 0.417 | 0.917 | 0.583 | 0.333 | 0.833 | 0.833 | 0.583 | 1.000 |
+| claude | non_verifiability | 0.250 | 0.000 | 0.500 | 0.250 | 0.083 | 0.500 | 1.000 | 1.000 | 1.000 |
+| claude | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| gemini | ambiguity | 0.389 | 0.167 | 0.639 | 0.389 | 0.139 | 0.611 | 0.556 | 0.278 | 0.833 |
+| gemini | incompleteness | 0.639 | 0.389 | 0.889 | 0.639 | 0.389 | 0.889 | 0.833 | 0.583 | 1.000 |
+| gemini | non_verifiability | 0.472 | 0.194 | 0.750 | 0.472 | 0.222 | 0.750 | 0.944 | 0.833 | 1.000 |
+| gemini | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| gpt-oss-120b | ambiguity | 0.222 | 0.056 | 0.417 | 0.222 | 0.056 | 0.417 | 0.333 | 0.111 | 0.583 |
+| gpt-oss-120b | incompleteness | 0.639 | 0.389 | 0.861 | 0.639 | 0.389 | 0.861 | 0.806 | 0.583 | 1.000 |
+| gpt-oss-120b | non_verifiability | 0.028 | 0.000 | 0.083 | 0.028 | 0.000 | 0.083 | 0.722 | 0.472 | 0.944 |
+| gpt-oss-120b | inconsistency | 0.944 | 0.833 | 1.000 | 0.944 | 0.833 | 1.000 | 1.000 | 1.000 | 1.000 |
+| openai | ambiguity | 0.806 | 0.667 | 0.944 | 0.806 | 0.639 | 0.944 | 0.944 | 0.833 | 1.000 |
+| openai | incompleteness | 0.667 | 0.417 | 0.889 | 0.667 | 0.444 | 0.889 | 0.917 | 0.750 | 1.000 |
+| openai | non_verifiability | 0.417 | 0.167 | 0.667 | 0.417 | 0.167 | 0.667 | 1.000 | 1.000 | 1.000 |
+| openai | inconsistency | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
 
 ## 02_especificidade_e_F1 (RQ1)
 
@@ -122,6 +122,40 @@ Intervalos: bootstrap percentil 95% sobre os requisitos-base. 'JURY' = agregaç�
 | gemini | 300 | 120121.000 | 44971.000 | 3.164 | 0 |
 | gpt-oss-120b | 300 | 134560.000 | 54849.000 | 1.541 | 26 |
 | openai | 300 | 115515.000 | 42088.000 | 2.989 | 0 |
+
+## 10_efeito_pareado_perturbacoes (RQ2)
+
+| model | perturbation | n_pairs | n_bases | score_change_minus_noise | score_change_minus_noise_lo | score_change_minus_noise_hi | decision_flip_minus_noise | decision_flip_minus_noise_lo | decision_flip_minus_noise_hi |
+|---|---|---|---|---|---|---|---|---|---|
+| JURY | P1 | 60 | 12 | 0.025 | -0.015 | 0.067 | -0.033 | -0.083 | 0.000 |
+| JURY | P2 | 60 | 12 | 0.062 | 0.021 | 0.106 | 0.050 | -0.017 | 0.117 |
+| claude | P1 | 60 | 12 | 0.079 | 0.054 | 0.108 | 0.017 | 0.000 | 0.050 |
+| claude | P2 | 60 | 12 | 0.146 | 0.092 | 0.204 | 0.083 | 0.017 | 0.167 |
+| gemini | P1 | 60 | 12 | 0.017 | -0.042 | 0.075 | 0.000 | 0.000 | 0.000 |
+| gemini | P2 | 60 | 12 | 0.017 | -0.025 | 0.058 | -0.017 | -0.050 | 0.000 |
+| gpt-oss-120b | P1 | 60 | 12 | 0.033 | -0.079 | 0.154 | -0.033 | -0.100 | 0.033 |
+| gpt-oss-120b | P2 | 60 | 12 | 0.012 | -0.175 | 0.188 | 0.017 | -0.067 | 0.100 |
+| openai | P1 | 60 | 12 | 0.029 | -0.071 | 0.137 | -0.017 | -0.067 | 0.033 |
+| openai | P2 | 60 | 12 | 0.042 | -0.050 | 0.142 | -0.017 | -0.067 | 0.033 |
+
+## 11_inconsistencias_decisao_rotulo (auditoria)
+
+| model_label | requirement_id | perturbation | repetition | defeito_injetado | defect_type | decision |
+|---|---|---|---|---|---|---|
+| claude | B03-INC | P0 | 1 | incompleteness | incompleteness | accept |
+| claude | B03-INC | P0 | 2 | incompleteness | incompleteness | accept |
+| claude | B03-INC | P0 | 3 | incompleteness | incompleteness | accept |
+| claude | B03-INC | P1 | 1 | incompleteness | incompleteness | accept |
+| claude | B07-O | P2 | 1 | none | incompleteness | accept |
+| claude | B08-AMB | P0 | 1 | ambiguity | ambiguity | accept |
+| claude | B08-AMB | P0 | 2 | ambiguity | ambiguity | accept |
+| claude | B08-AMB | P0 | 3 | ambiguity | ambiguity | accept |
+| claude | B08-O | P1 | 1 | none | incompleteness | accept |
+| claude | B10-O | P0 | 1 | none | incompleteness | accept |
+| claude | B10-O | P0 | 3 | none | incompleteness | accept |
+| gemini | B04-AMB | P0 | 2 | ambiguity | incompleteness | accept |
+| gemini | B04-AMB | P1 | 1 | ambiguity | incompleteness | accept |
+| gemini | B07-O | P0 | 3 | none | incompleteness | accept |
 
 ## 09_dificuldade_por_dimensao (RQ4: menor queda = dimensão mais difícil de avaliar)
 

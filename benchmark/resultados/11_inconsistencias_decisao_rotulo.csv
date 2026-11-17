@@ -1,0 +1,15 @@
+model_label,requirement_id,perturbation,repetition,defeito_injetado,defect_type,decision
+claude,B03-INC,P0,1,incompleteness,incompleteness,accept
+claude,B03-INC,P0,2,incompleteness,incompleteness,accept
+claude,B03-INC,P0,3,incompleteness,incompleteness,accept
+claude,B03-INC,P1,1,incompleteness,incompleteness,accept
+claude,B07-O,P2,1,none,incompleteness,accept
+claude,B08-AMB,P0,1,ambiguity,ambiguity,accept
+claude,B08-AMB,P0,2,ambiguity,ambiguity,accept
+claude,B08-AMB,P0,3,ambiguity,ambiguity,accept
+claude,B08-O,P1,1,none,incompleteness,accept
+claude,B10-O,P0,1,none,incompleteness,accept
+claude,B10-O,P0,3,none,incompleteness,accept
+gemini,B04-AMB,P0,2,ambiguity,incompleteness,accept
+gemini,B04-AMB,P1,1,ambiguity,incompleteness,accept
+gemini,B07-O,P0,3,none,incompleteness,accept

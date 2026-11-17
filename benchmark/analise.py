@@ -19,13 +19,13 @@ RNG = np.random.default_rng(42)
 NBOOT = 2000
 
 # ---------------- utilidades ----------------
-def ci(vec):
+def ci(vec, rng=RNG):
     """média e IC 95% (bootstrap percentil) de um vetor com um valor por requisito-base."""
     v = np.asarray(vec, dtype=float)
     v = v[~np.isnan(v)]
     if len(v) == 0:
         return np.nan, np.nan, np.nan
-    idx = RNG.integers(0, len(v), size=(NBOOT, len(v)))
+    idx = rng.integers(0, len(v), size=(NBOOT, len(v)))
     b = v[idx].mean(axis=1)
     return v.mean(), np.percentile(b, 2.5), np.percentile(b, 97.5)
 
@@ -105,9 +105,12 @@ def sensibilidade(df, bases):
         for d in DEFECTS:
             x = g[g.versao == d]
             exact = x.assign(v=(x.defect_type == d)).groupby("id_base")["v"].mean().to_dict()
+            strict = x.assign(v=(x.defect_type == d) & (x.decision == "revise")).groupby("id_base")["v"].mean().to_dict()
             flag = x.assign(v=(x.decision == "revise")).groupby("id_base")["v"].mean().to_dict()
             e, el, eh = ci(per_base(exact, bases)); f, fl, fh = ci(per_base(flag, bases))
+            st, stl, sth = ci(per_base(strict, bases), rng=np.random.default_rng(4242))
             rows.append(dict(model=m, defect=d, exact_detection=e, exact_lo=el, exact_hi=eh,
+                             exact_and_revise=st, strict_lo=stl, strict_hi=sth,
                              flagged_revise=f, flag_lo=fl, flag_hi=fh))
     return pd.DataFrame(rows)
 
@@ -212,6 +215,41 @@ def robustez(df, bases):
             rows.append(r)
     return pd.DataFrame(rows)
 
+def efeito_pareado_perturbacoes(df, bases):
+    """Diferença por base: mudança P0-P1/P2 menos ruído P0rep1-P0rep2.
+
+    O IC reamostra bases inteiras, preservando os cinco itens de cada base.
+    """
+    rows = []
+    for model, g in df.groupby("model_label"):
+        def get(p, rep):
+            return g[(g.perturbation == p) & (g.repetition == rep)].set_index("requirement_id")
+        p0, rep2 = get("P0", 1), get("P0", 2)
+        for perturbation in ("P1", "P2"):
+            altered = get(perturbation, 1)
+            ids = p0.index.intersection(rep2.index).intersection(altered.index)
+            if len(ids) == 0:
+                continue
+            base = p0.loc[ids, "id_base"]
+            noise_score = sum((p0.loc[ids, s] - rep2.loc[ids, s]).abs() for s in SCORES) / len(SCORES)
+            pert_score = sum((p0.loc[ids, s] - altered.loc[ids, s]).abs() for s in SCORES) / len(SCORES)
+            noise_flip = (p0.loc[ids, "decision"] != rep2.loc[ids, "decision"]).astype(float)
+            pert_flip = (p0.loc[ids, "decision"] != altered.loc[ids, "decision"]).astype(float)
+            row = dict(model=model, perturbation=perturbation, n_pairs=len(ids), n_bases=base.nunique())
+            for name, difference in (("score_change_minus_noise", pert_score - noise_score),
+                                     ("decision_flip_minus_noise", pert_flip - noise_flip)):
+                row[name], row[name + "_lo"], row[name + "_hi"] = ci(
+                    per_base(difference.groupby(base).mean().to_dict(), bases))
+            rows.append(row)
+    return pd.DataFrame(rows)
+
+def inconsistencias_decisao_rotulo(df):
+    """Respostas que rotulam um defeito, mas aceitam o requisito (sem o júri)."""
+    g = df[(df.model_label != "JURY") & (df.decision == "accept") & (df.defect_type != "none")]
+    return g[["model_label", "requirement_id", "perturbation", "repetition",
+              "defeito_injetado", "defect_type", "decision"]].sort_values(
+                  ["model_label", "requirement_id", "perturbation", "repetition"])
+
 def concordancia(df):
     g = df[(df.perturbation == "P0") & (df.repetition == 1) & (df.model_label != "JURY")]
     models = sorted(g.model_label.unique())
@@ -258,6 +296,8 @@ def main():
         "06_robustez_a_mudancas_superficiais (RQ2, RQ3)": robustez(df, bases),
         "07_concordancia_entre_modelos": concordancia(df),
         "08_custo_e_tempo": custo(df),
+        "10_efeito_pareado_perturbacoes (RQ2)": efeito_pareado_perturbacoes(df, bases),
+        "11_inconsistencias_decisao_rotulo (auditoria)": inconsistencias_decisao_rotulo(df),
     }
     md = ["# Resultados do benchmark\n",
           f"Respostas válidas: {len(df[df.model_label != 'JURY'])}; falhas técnicas registradas e excluídas: {n_err}.",

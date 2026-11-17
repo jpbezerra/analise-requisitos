@@ -5,10 +5,10 @@
 LLMs são cada vez mais usados como juízes automáticos de artefatos de software. Este projeto testa duas coisas:
 o modelo **acerta o defeito que de fato existe** num requisito? E **mantém o julgamento** quando só a apresentação do texto muda?
 
-Para isso, montamos um benchmark controlado. Cada requisito correto ganha variantes com **um único defeito injetado**,
-então a resposta certa é conhecida de antemão, sem depender de um "padrão-ouro" humano.
+Para isso, montamos um benchmark controlado. Cada requisito-base ganha variantes com um **defeito-alvo injetado**.
+O gabarito é operacional, mas ainda precisa de validação independente para descartar defeitos adicionais.
 
-📄 **Artigo:** [`docs/latex/artigo.pdf`](docs/latex/artigo.pdf) (modelo SBC) · [versão em Markdown](docs/artigo_completo.md)
+📄 **Artigo atualizado:** [versão em Markdown](docs/artigo_completo.md) · [fonte LaTeX (modelo SBC)](docs/latex/artigo.tex). O PDF versionado foi gerado antes destas correções e deve ser exportado novamente antes da submissão.
 
 ---
 
@@ -21,11 +21,11 @@ então a resposta certa é conhecida de antemão, sem depender de um "padrão-ou
 | Macro-F1 (5 classes) | 0,64 | 0,56 | **0,68** | 0,49 | **0,68** |
 | Mesma decisão nas 3 repetições | **100%** | 93% | 97% | 88% | 97% |
 
-- **Perceber o defeito é mais fácil do que nomeá-lo.** A inconsistência foi detectada em ~100% dos casos. A falta de verificabilidade foi chamada de "ambiguidade" em 48% das respostas.
+- **Perceber o defeito é mais fácil do que nomeá-lo.** A inconsistência foi rotulada corretamente em ~100% dos casos. A falta de verificabilidade foi chamada de "ambiguidade" em 48% das respostas, somando modelos e condições.
 - **A ambiguidade é a dimensão mais difícil:** teve a menor queda de nota, a menor concordância entre modelos e 33% das variantes ambíguas foram aceitas sem defeito.
 - **O rigor varia muito.** O GPT-5.6-terra pediu revisão de 92% dos requisitos *corretos*. O gpt-oss-120b foi o oposto e deixou passar defeitos.
-- **Mudanças superficiais (formatação, ordem do contexto) afetam pouco.** O efeito só aparece acima do ruído no Claude, o modelo mais estável.
-- **O júri fica perto do melhor modelo em tudo, mas não supera nenhum.** Ele também herda o viés do juiz mais severo.
+- **Mudanças superficiais afetam pouco em média**, mas a comparação pareada com o ruído mostra efeito na nota do Claude em P1/P2 e do júri em P2.
+- **O júri oferece um compromisso entre métricas**, mas herda parte do viés do juiz mais severo.
 
 <p align="center">
   <img src="docs/latex/figuras/fig5_confusao.png" width="48%" alt="Defeito injetado × defeito apontado">
@@ -41,7 +41,7 @@ então a resposta certa é conhecida de antemão, sem depender de um "padrão-ou
 
 ```
 12 requisitos-base (app de tarefas "TaskFlow")
- └─ cada um: 1 original + 4 variantes com UM defeito
+ └─ cada um: 1 original + 4 variantes com um defeito-alvo
       ambiguidade · incompletude · falta de verificabilidade · inconsistência
           = 60 itens
               × 5 consultas (3 repetições + formatação P1 + ordem P2)
@@ -55,7 +55,7 @@ Cada modelo devolve um JSON com notas de 1 a 5 em **completude, ausência de amb
 | Pergunta | O que mede |
 | --- | --- |
 | **RQ1** Sensibilidade | detecção do defeito, especificidade, macro-F1, queda de nota no critério afetado |
-| **RQ2** Robustez | mudança causada por P1/P2 **comparada ao ruído entre repetições idênticas** |
+| **RQ2** Robustez | mudança causada por P1/P2 **menos o ruído entre repetições idênticas, nos mesmos itens** |
 | **RQ3** Júri | as mesmas métricas para o júri; concordância entre modelos (α de Krippendorff) |
 | **RQ4** Dificuldade | ranking das quatro dimensões |
 
@@ -83,16 +83,14 @@ docs/
 cd benchmark
 pip install pandas numpy matplotlib
 
-echo "OPENROUTER_API_KEY=sk-or-..." > .env          # lido automaticamente pelo script
-python run_benchmark.py --config config.json --dry-run   # conta as chamadas
-python run_benchmark.py --config config.json --limit 4   # teste curto
-python run_benchmark.py --config config.json             # execução completa (retomável)
-
+# Reproduzir as tabelas a partir das respostas já coletadas: sem chave e sem custo de API
 python analise.py --raw respostas_brutas --corpus corpus_requisitos.csv --out resultados
 jupyter nbconvert --to notebook --execute --inplace graficos.ipynb
 ```
 
-A execução completa custa **cerca de US$ 2** em créditos do OpenRouter, pelos preços de novembro de 2026. Para só refazer a análise, as respostas brutas já estão no repositório e não é preciso chave.
+Uma **nova coleta** é opcional e exige `OPENROUTER_API_KEY`. Confira preços e IDs dos modelos antes de executar `python run_benchmark.py --config config.json --dry-run` e, depois, a execução completa. Não misture uma nova coleta às respostas originais sem versionar os resultados.
+
+Para só refazer a análise, as respostas brutas já estão no repositório e não é preciso chave. A coleta original custou **cerca de US$ 2** em créditos do OpenRouter, pelos preços de novembro de 2026; isso não é uma estimativa de preço atual.
 
 | Modelo | ID no OpenRouter | Temperatura |
 | --- | --- | :---: |
@@ -108,7 +106,7 @@ Coleta feita em 15 e 16/11/2026. Modelos proprietários mudam com o tempo, entã
 ## Limitações
 
 Só 12 requisitos-base, então os intervalos de confiança são largos. O estudo usa um domínio, um idioma (inglês) e uma redação de prompt.
-O corpus foi rascunhado com apoio de um LLM da mesma família de um dos juízes. Detalhes na seção *Ameaças à validade* do artigo.
+O corpus foi rascunhado com apoio de um LLM da mesma família de um dos juízes e ainda não recebeu validação independente do gabarito. B06-AMB, B07-AMB e B11-AMB precisam de adjudicação antes da submissão. Há 14 respostas individuais com rótulo de defeito e decisão “aceitar”; a análise expõe acerto do rótulo e acerto estrito separadamente. Detalhes na seção *Ameaças à validade* do artigo e no [protocolo de revisão do corpus](benchmark/REVISAO_CORPUS.md).
 
 ## Licença
 
