@@ -83,6 +83,7 @@ def main():
         "todos (12 bases)": metrics(df, bases),
         "sem as 3 variantes AMB em dúvida": metrics(df, bases, drop_amb_of=DOUBT),
         "sem as 3 bases em dúvida (9 bases)": metrics(df, [b for b in bases if b not in DOUBT]),
+        "sem as 3 AMB discordantes da validação (B04, B06, B11)": metrics(df, bases, drop_amb_of=["B04", "B06", "B11"]),
     }
     sens = pd.DataFrame(scen).T.reset_index().rename(columns={"index": "cenario"})
     sens.to_csv(os.path.join(a.out, "11_sensibilidade_exclusao_gabarito.csv"), index=False)

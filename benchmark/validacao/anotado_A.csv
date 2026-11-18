@@ -1,0 +1,61 @@
+prompt_id,id_requisito,id_base,versao,defeito_injetado,alvo,defeitos_presentes,decisao,observacao,set,alvo_presente,exato,extra,dec_ok
+REQ-055,B01-O,B01,original,none,nenhum,nenhum,aceitar,"Validação, lista, status, posição e tempo definidos e coerentes.",frozenset({'nenhum'}),True,True,False,True
+REQ-009,B01-AMB,B01,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'top of the list or of the page' admite duas posições de exibição.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-046,B01-INC,B01,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam validação do título, lista de destino, status inicial e exibição.",frozenset({'incompletude'}),True,True,False,True
+REQ-056,B01-NV,B01,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'almost instantly' não é mensurável.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-030,B01-CON,B01,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Status 'pending' não existe em CR-02 (open/done).,frozenset({'inconsistencia'}),True,True,False,True
+REQ-059,B02-O,B02,original,none,nenhum,nenhum,aceitar,"Status, registro de conclusão, destino e tempo definidos conforme CR-03.",frozenset({'nenhum'}),True,True,False,True
+REQ-045,B02-AMB,B02,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'Completed section ... or to the archive' admite dois destinos.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-036,B02-INC,B02,incompleteness,incompleteness,incompletude,incompletude,revisar,"Não define registro da conclusão, movimentação para 'Completed' nem tempo de resposta.",frozenset({'incompletude'}),True,True,False,True
+REQ-013,B02-NV,B02,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'in a timely manner' não é mensurável.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-052,B02-CON,B02,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Remover permanentemente contradiz CR-03 (concluídas ficam na seção 'Completed').,frozenset({'inconsistencia'}),True,True,False,True
+REQ-035,B03-O,B03,original,none,nenhum,nenhum,aceitar,"Permissões, tempo, limite de título e mensagem de erro definidos conforme CR-05.",frozenset({'nenhum'}),True,True,False,True
+REQ-003,B03-AMB,B03,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'reject ... or show the message' permite rejeitar sem mensagem ou só exibir mensagem; deveria ser 'with'.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-001,B03-INC,B03,incompleteness,incompleteness,incompletude,incompletude,revisar,Não define tempo de resposta nem validação/erro para título vazio ou acima de 120 caracteres.,frozenset({'incompletude'}),True,True,False,True
+REQ-047,B03-NV,B03,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,"'invalid title' e 'appropriate, user-friendly' não têm critério objetivo.",frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-012,B03-CON,B03,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Limite de 255 caracteres contradiz CR-05 (120).,frozenset({'inconsistencia'}),True,True,False,True
+REQ-010,B04-O,B04,original,none,nenhum,nenhum,aceitar,"Condição, canal, prazo e comportamento de atraso claros e coerentes com CR-02/06/07.",frozenset({'nenhum'}),True,True,False,True
+REQ-041,B04-AMB,B04,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'one day before' pode ser 24 h ou o dia de calendário anterior no fuso do usuário (CR-07).,frozenset({'ambiguidade'}),True,True,False,True
+REQ-029,B04-INC,B04,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam antecedência, destinatário, canal, condição de status e forma de sinalização.",frozenset({'incompletude'}),True,True,False,True
+REQ-021,B04-NV,B04,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'shortly before' e 'clearly flag' não são mensuráveis.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-008,B04-CON,B04,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Lembrete por e-mail contradiz CR-06 (lembretes só in-app).,frozenset({'inconsistencia'}),True,True,False,True
+REQ-011,B05-O,B05,original,none,nenhum,nenhum,aceitar,"Limites, unicidade, confirmação e exceção do Inbox definidos conforme CR-08.",frozenset({'nenhum'}),True,True,False,True
+REQ-060,B05-AMB,B05,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'unique name' não diz se é único entre as listas do usuário ou no sistema todo.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-019,B05-INC,B05,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam limites, regras de nome, confirmação, destino das tarefas e exceção do Inbox.",frozenset({'incompletude'}),True,True,False,True
+REQ-051,B05-NV,B05,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'reasonable number' e 'short name' não são mensuráveis.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-017,B05-CON,B05,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Permitir excluir 'Inbox' contradiz CR-08.,frozenset({'inconsistencia'}),True,True,False,True
+REQ-014,B06-O,B06,original,none,nenhum,nenhum,aceitar,Retenção de 30 dias na lixeira respeita CR-10; restauração e exclusão definidas.,frozenset({'nenhum'}),True,True,False,True
+REQ-058,B06-AMB,B06,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'until 30 days have passed' não fixa o marco inicial da contagem.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-044,B06-INC,B06,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam período de retenção, restauração e exclusão definitiva.",frozenset({'incompletude'}),True,True,False,True
+REQ-023,B06-NV,B06,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'for a while' e 'easily' não têm critério objetivo.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-043,B06-CON,B06,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Reter 90 dias na lixeira contradiz CR-10 (máx. 30 dias).,frozenset({'inconsistencia'}),True,True,False,True
+REQ-053,B07-O,B07,original,none,nenhum,nenhum,aceitar,"Critérios, direções e desempenho definidos; posição sem vencimento coberta por CR-11.",frozenset({'nenhum'}),True,True,False,True
+REQ-007,B07-AMB,B07,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,"'by date' pode ser data de vencimento ou de criação, e a direção da ordenação não é dada.",frozenset({'ambiguidade'}),True,True,False,True
+REQ-048,B07-INC,B07,incompleteness,incompleteness,incompletude,incompletude,revisar,Faltam direção de ordenação e requisito de tempo/tamanho de lista.,frozenset({'incompletude'}),True,True,False,True
+REQ-032,B07-NV,B07,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'quickly' e 'large lists' não são mensuráveis.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-022,B07-CON,B07,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Tarefas sem vencimento primeiro contradiz CR-11.,frozenset({'inconsistencia'}),True,True,False,True
+REQ-018,B08-O,B08,original,none,nenhum,nenhum,aceitar,"Escopo, critério de correspondência, tempo e mensagem de vazio definidos; exclui excluídas.",frozenset({'nenhum'}),True,True,False,True
+REQ-039,B08-AMB,B08,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,"'entered words' pode significar todas as palavras, qualquer palavra ou a frase exata.",frozenset({'ambiguidade'}),True,True,False,True
+REQ-050,B08-INC,B08,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam escopo (status, acesso), critério de correspondência, tempo e resultado vazio.",frozenset({'incompletude'}),True,True,False,True
+REQ-031,B08-NV,B08,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,"'relevant', 'fast way' e 'friendly manner' sem critério de teste.",frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-034,B08-CON,B08,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Retornar tarefas excluídas na busca contradiz CR-09.,frozenset({'inconsistencia'}),True,True,False,True
+REQ-040,B09-O,B09,original,none,nenhum,nenhum,aceitar,"Tentativas consecutivas, duração e mensagem definidas; coerente com CR-14.",frozenset({'nenhum'}),True,True,False,True
+REQ-004,B09-AMB,B09,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,Não diz se as 5 tentativas falhas são consecutivas ou acumuladas em algum período.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-024,B09-INC,B09,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam número de tentativas, duração do bloqueio e mensagem.",frozenset({'incompletude'}),True,True,False,True
+REQ-038,B09-NV,B09,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,"'short time', 'several' e 'suitable way' sem valores objetivos.",frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-057,B09-CON,B09,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Não zerar contador após login bem-sucedido contradiz CR-14.,frozenset({'inconsistencia'}),True,True,False,True
+REQ-028,B10-O,B10,original,none,nenhum,nenhum,aceitar,Papéis coerentes com CR-04/CR-15 e tempo de 5 s verificável.,frozenset({'nenhum'}),True,True,False,True
+REQ-002,B10-AMB,B10,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,"'Editar ... listas' para editor admite ler-se como incluir excluir/compartilhar lista, o que só o dono pode (CR-04).",frozenset({'ambiguidade'}),True,True,False,True
+REQ-020,B10-INC,B10,incompleteness,incompleteness,incompletude,incompletude,revisar,Não define papéis (viewer/editor) nem tempo/comportamento do compartilhamento.,frozenset({'incompletude'}),True,True,False,True
+REQ-037,B10-NV,B10,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'almost immediately' não é mensurável.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-025,B10-CON,B10,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Viewer concluir tarefas contradiz CR-15 e o próprio 'read-only'.,frozenset({'inconsistencia'}),True,True,False,True
+REQ-042,B11-O,B11,original,none,nenhum,nenhum,aceitar,"Métrica, percentil, ponto/janela de medição e carga definidos, conforme CR-16.",frozenset({'nenhum'}),True,True,False,True
+REQ-005,B11-AMB,B11,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,"'up to 500 users' não diz se são concorrentes ou cadastrados, nem onde/por quanto tempo medir.",frozenset({'ambiguidade'}),True,True,False,True
+REQ-054,B11-INC,B11,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam quantas tarefas, percentil e condições de carga.",frozenset({'incompletude'}),True,True,False,True
+REQ-006,B11-NV,B11,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,"'fast', 'responsive' e 'all expected users' não têm critério mensurável.",frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-016,B11-CON,B11,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,3 s no p95 contradiz a política de no máximo 1 s (CR-16).,frozenset({'inconsistencia'}),True,True,False,True
+REQ-015,B12-O,B12,original,none,nenhum,nenhum,aceitar,"Confirmação, prazo de 30 dias e notificação definidos e coerentes com CR-10.",frozenset({'nenhum'}),True,True,False,True
+REQ-049,B12-AMB,B12,ambiguity,ambiguity,ambiguidade,ambiguidade,revisar,'within 30 days of the request or its confirmation' admite dois marcos iniciais.,frozenset({'ambiguidade'}),True,True,False,True
+REQ-033,B12-INC,B12,incompleteness,incompleteness,incompletude,incompletude,revisar,"Faltam confirmação, destino dos dados, prazo e notificação.",frozenset({'incompletude'}),True,True,False,True
+REQ-026,B12-NV,B12,non_verifiability,non_verifiability,nao_verificabilidade,nao_verificabilidade,revisar,'promptly' e 'suitable manner' não são mensuráveis.,frozenset({'nao_verificabilidade'}),True,True,False,True
+REQ-027,B12-CON,B12,inconsistency,inconsistency,inconsistencia,inconsistencia,revisar,Reter dados por 6 meses contradiz CR-10 (máx. 30 dias).,frozenset({'inconsistencia'}),True,True,False,True
