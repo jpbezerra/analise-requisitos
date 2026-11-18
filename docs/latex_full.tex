@@ -1,0 +1,274 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{url}
+\usepackage[square,authoryear]{natbib}
+\setcitestyle{aysep={}}
+\graphicspath{{figuras/}}
+
+\newcommand{\IC}[2]{[#1;\,#2]}
+
+\title{Além da concordância: uma avaliação da robustez de modelos de linguagem na análise da qualidade de requisitos de software}
+
+\author{Fabriely Luana Pinheiro dos Santos, João Pedro Bezerra de Melo Teixeira de Lima}
+\providecommand{\inst}[1]{\textsuperscript{#1}}
+\address{\textsuperscript{1}UFPE -- Recife -- PE -- Brasil}
+\email{\{flps,jpbmtl\}@cin.ufpe.br}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Large language models (LLMs) have already been studied as requirements-quality evaluators, but their response to controlled defects and superficial presentation changes remains important to test. We benchmark 12 base requirements, each paired with four variants containing a target injected defect. Four LLMs from three model families and an aggregated jury evaluated 60 items under repetition and two presentation changes, yielding 1,200 individual judgments. Models flagged most variants but named the target defect less often: non-verifiability was labeled ambiguity in 48\% of responses across all five conditions. One model asked to revise 92\% of originals. A paired comparison against repeat-run noise found a score effect for Claude under both perturbations and for the jury under reordered context. Human review and independent validation of the answer key remain necessary.
+\end{abstract}
+
+\begin{resumo}
+Modelos de linguagem (LLMs) já são investigados como avaliadores da qualidade de requisitos, mas importa testar sua resposta a defeitos controlados e a mudanças superficiais de apresentação. Avaliamos 12 requisitos-base com quatro variantes cada, contendo um defeito-alvo injetado. Quatro LLMs de três famílias e um júri avaliaram 60 itens sob repetição e duas mudanças de apresentação, em 1.200 julgamentos individuais. Os modelos marcaram para revisão a maior parte das variantes, mas nomearam o defeito-alvo com menor frequência: a falta de verificabilidade foi rotulada como ambiguidade em 48\% das respostas nas cinco condições. Um modelo pediu revisão de 92\% dos originais. A comparação pareada com o ruído mostrou efeito na nota do Claude sob ambas as perturbações e do júri sob mudança de ordem. Revisão humana e validação independente do gabarito permanecem necessárias.
+\end{resumo}
+
+\section{Introdução}
+
+Modelos de linguagem vêm sendo aplicados em diversas atividades da Engenharia de Requisitos (ER), sobretudo na elicitação, na geração e na transformação de requisitos \citep{marques2024,silva2025}. Mais recentemente, passaram a atuar também como avaliadores automáticos, no paradigma conhecido como \emph{LLM-as-a-Judge}: o modelo recebe um artefato e atribui notas, escolhe entre alternativas ou aprova o conteúdo.
+
+A literatura mostra que juízes LLM favorecem a fluência e a verbosidade \citep{zhou2024}, são sensíveis à escala de pontuação \citep{fujinuma2025} e aceitam bem respostas válidas, mas rejeitam mal as inválidas \citep{jain2025}. Para requisitos de software, isso levanta duas questões práticas: se o modelo identifica o defeito que realmente existe no requisito, e não apenas se concorda com outro avaliador; e se o julgamento se mantém quando só a apresentação muda.
+
+Este trabalho investiga essas questões com um benchmark controlado. Para cada requisito-base considerado correto pelos autores, são criadas variantes com um defeito-alvo deliberado. Isso fornece um gabarito operacional sem tratar a avaliação humana como padrão-ouro perfeito \citep{nordin2017}, mas não garante ausência de outras falhas no item. A pergunta de pesquisa é: \emph{como diferentes LLMs identificam defeitos de qualidade em requisitos de software e quão robustos são seus julgamentos diante de repetições e de alterações superficiais no texto?} Ela se desdobra em quatro subperguntas:
+
+\begin{itemize}
+\item \textbf{RQ1.} Quão sensíveis são diferentes LLMs a defeitos específicos de qualidade em requisitos?
+\item \textbf{RQ2.} A avaliação permanece consistente quando somente a formatação ou a ordem do contexto são alteradas?
+\item \textbf{RQ3.} Um júri de múltiplos LLMs é mais robusto do que um modelo individual?
+\item \textbf{RQ4.} Quais dimensões de qualidade são mais difíceis de avaliar?
+\end{itemize}
+
+As contribuições são: (i) um corpus de 60 itens com defeitos-alvo e gabarito operacional; (ii) um protocolo replicável que compara perturbações ao ruído nos mesmos itens; e (iii) uma comparação empírica entre quatro LLMs de três famílias e um júri.
+
+\section{Trabalhos relacionados}
+
+\textbf{Qualidade de requisitos.} A norma ISO/IEC/IEEE 29148:2018 define as características esperadas de um requisito, como ser não ambíguo, completo, verificável e consistente \citep{iso29148}. \citet{montgomery2022} mapearam 105 estudos e identificaram ambiguidade, completude, consistência e correção como os atributos mais estudados. \citet{sahu2024} operacionalizaram as características da norma em um framework de processamento de linguagem natural, e \citet{glinz2000} é a formulação clássica dessas qualidades. \citet{nordin2017} mostram que o julgamento de especialistas humanos também é inconsistente, o que motiva o uso de um gabarito derivado de alterações controladas.
+
+\textbf{LLMs na Engenharia de Requisitos.} Revisões recentes mostram a expansão do uso de LLMs em todas as fases da ER, com predominância de tarefas de geração e lacunas na validação dos artefatos \citep{marques2024,silva2025}. \citet{almeida2025} observaram dificuldades com ambiguidade na extração de requisitos, e \citet{pasquale2025} relatam o uso de LLMs na especificação funcional de um projeto real, sob supervisão humana. \citet{yamani2025} encontraram inconsistências entre os valores declarados por 23 LLMs e seu comportamento em tarefas de ER.
+
+\textbf{LLM-as-a-Judge.} Juízes LLM tendem a favorecer a qualidade superficial \citep{zhou2024}, variam com a faixa de notas do prompt \citep{fujinuma2025} e rejeitam mal respostas inválidas, com taxa de verdadeiros negativos abaixo de 25\% em alguns cenários \citep{jain2025}. \citet{badshah2024} propõem vereditos guiados por referência, e \citet{li2025confidence} defendem calibrar avaliadores para distribuições de preferência.
+
+\textbf{Júris e decision models.} \citet{verga2024} mostraram que um painel de modelos menores, de famílias diferentes, supera um juiz grande a um custo mais de sete vezes menor. Trabalhos posteriores propõem destilar o júri \citep{tang2025} ou selecionar juízes por instância \citep{li2025jury} ou por similaridade \citep{yang2025}. \citet{williams2025}, por outro lado, encontraram ganho do júri em apenas um de onze critérios clínicos. \citet{li2026jev} avaliam um decision model que retorna vereditos com probabilidades a uma fração do custo, com perdas em respostas incorretas bem redigidas.
+
+\textbf{Posicionamento e lacuna.} Avaliar qualidade de requisitos com LLMs não é inédito. \citet{shefa2026} comparam dez modelos com gabarito de especialistas, dois conjuntos de requisitos, repetições e temperaturas. \citet{paiva2026} empregam um juiz LLM baseado em atributos da ISO 29148 para avaliar requisitos gerados de títulos de issues. Nosso diferencial é combinar pares original--variante com defeito-alvo, mudanças de apresentação, comparação pareada com ruído e agregação em júri (Tabela~\ref{tab:relacionados}). \citet{lubos2024} é o estudo mais próximo quanto ao instrumento: usam um LLM para avaliar, segundo a ISO 29148, se cada requisito satisfaz cada característica de qualidade, justificando a decisão e propondo uma versão melhorada, em dois conjuntos de requisitos reais ou gerados. Lá o foco é o potencial do LLM como assistente de qualidade; aqui o foco é a confiabilidade do juiz, medida contra defeitos injetados em pares, com repetições, perturbações e júri. Isso não dispensa a validação humana do corpus.
+
+\begin{table}[ht]
+\centering
+\caption{Posicionamento frente aos estudos mais próximos}
+\label{tab:relacionados}
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Estudo & Desenho da avaliação & Diferença deste estudo \\
+\midrule
+\citet{shefa2026} & Dez LLMs; gabarito de especialistas; dois conjuntos; repetições e temperaturas. & Pares original--variante, perturbações e júri. \\
+\citet{lubos2024} & LLM avalia características ISO 29148 de cada requisito, com explicação e proposta de melhoria; dois conjuntos. & Defeitos conhecidos em pares, repetições, perturbações e júri; mede o juiz, não o assistente. \
+\citet{paiva2026} & Requisitos gerados de issues; juiz LLM com atributos ISO 29148; validação humana amostral. & Foco na confiabilidade do avaliador, não na geração. \\
+Este estudo & 12 bases, 48 variantes, quatro LLMs, duas perturbações e júri. & Separa rótulo, decisão e estabilidade em domínio sintético. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Metodologia}
+
+\subsection{Corpus}
+
+O corpus descreve o TaskFlow, um aplicativo web de lista de tarefas. São 12 requisitos-base em inglês, redigidos como enunciados de requisitos, cobrindo criação, conclusão e edição de tarefas, lembretes, listas, lixeira, ordenação, busca, bloqueio de login, compartilhamento, desempenho e exclusão de conta. Cada base tem quatro variantes com um defeito-alvo injetado (Tabela~\ref{tab:defeitos}), totalizando 60 itens.
+
+\begin{table}[ht]
+\centering
+\caption{Defeitos injetados nas variantes}
+\label{tab:defeitos}
+\small
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+Defeito & Critério afetado & Como é introduzido \\
+\midrule
+Ambiguidade & Ausência de ambiguidade & Construção com duas interpretações razoáveis \\
+Incompletude & Completude & Remoção de limites, condições ou comportamento de erro \\
+Falta de verificabilidade & Verificabilidade & Troca de critério mensurável por termo subjetivo \\
+Inconsistência & Consistência & Contradição com uma regra do contexto \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Cada item vem com uma descrição curta do sistema e de uma a três regras relacionadas, idênticas nas cinco versões de uma base. O padrão esperado é operacional: o original deve receber nota 4 ou 5 em todos os critérios e a decisão ``aceitar''; a variante deve receber nota 1 ou 2 no critério afetado e a decisão ``revisar''. Uma execução-piloto revelou contradições ou omissões em três bases (B03, B04 e B05) em relação às regras do contexto; elas foram corrigidas nas cinco versões antes da coleta final.
+
+\subsection{Rubric e prompt}
+
+Os modelos avaliam cada requisito em quatro critérios, com notas inteiras de 1 a 5: completude, ausência de ambiguidade, verificabilidade e consistência \citep{iso29148,montgomery2022,sahu2024}. Também informam o defeito principal, a decisão (aceitar ou revisar) e uma justificativa de até duas frases. Todos os modelos recebem o mesmo prompt de sistema, que trata o texto do requisito como dado, e devolvem um objeto JSON. O identificador mostrado ao modelo é neutro (REQ-001 a REQ-060, sorteado com semente fixa), para não revelar o tipo de variante.
+
+\subsection{Modelos e condições}
+
+Foram avaliados quatro modelos de três famílias (Anthropic, Google e OpenAI; Tabela~\ref{tab:modelos}), acessados pelo OpenRouter em 15 e 16 de novembro de 2026. GPT-5.6-terra e gpt-oss-120b são modelos distintos da mesma família de fornecedor.
+
+\begin{table}[ht]
+\centering
+\caption{Modelos avaliados}
+\label{tab:modelos}
+\small
+\begin{tabular}{@{}lllc@{}}
+\toprule
+Modelo & Identificador & Temperatura & Raciocínio \\
+\midrule
+Claude Sonnet 5.5 & \texttt{anthropic/claude-sonnet-5.5} & 0 & padrão \\
+GPT-5.6-terra & \texttt{openai/gpt-5.6-terra} & não aceita & baixo \\
+Gemini 3.7 Flash & \texttt{google/gemini-3.7-flash} & 0 & baixo \\
+gpt-oss-120b (aberto) & \texttt{openai/gpt-oss-120b} & 0 & baixo \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cada item foi consultado cinco vezes por modelo: três repetições na apresentação original (P0), uma com formatação em Markdown (P1) e uma com o requisito antes do contexto e as regras em ordem inversa (P2). As perturbações preservam o significado. O júri agrega as respostas individuais sem novas chamadas: a nota é a mediana, a decisão é ``revisar'' se pelo menos metade dos modelos pedir revisão, e o defeito é o mais votado.
+
+\subsection{Métricas}
+
+Para RQ1: acerto do rótulo (defeito apontado igual ao injetado, independentemente da decisão), acerto estrito (rótulo correto e decisão ``revisar''), proporção de variantes marcadas para revisão, especificidade (originais aceitos), macro-F1 em cinco classes, queda de nota no critério afetado e MAE em relação à faixa esperada. Para RQ2: concordância entre três repetições e variação absoluta de nota e troca de decisão entre P0 e P1/P2. Para cada item, subtraímos o ruído P0-repetição 1 versus P0-repetição 2 da mudança sob perturbação; agregamos a diferença por requisito-base. Um IC que exclui zero sugere efeito distinguível do ruído sob este protocolo. Para RQ3: as mesmas métricas para o júri e alfa de Krippendorff entre modelos. Para RQ4: ordenação das dimensões pela queda de nota. ICs de 95\% usam bootstrap percentil com 2.000 reamostragens sobre os 12 requisitos-base, a unidade independente.
+
+\section{Resultados}
+
+As 1.200 respostas foram válidas, sem falhas técnicas após as novas tentativas automáticas. Valores entre colchetes são IC 95\%.
+
+\subsection{RQ1: sensibilidade aos defeitos}
+
+Os modelos percebem o problema com mais facilidade do que o nomeiam. Em inconsistência e falta de verificabilidade, Claude, GPT-5.6-terra e Gemini marcaram para revisão entre 94\% e 100\% das variantes; em incompletude, todos ficaram entre 81\% e 92\%. A ambiguidade foi a exceção: 75\% no Claude, 56\% no Gemini e 33\% \IC{11\%}{58\%} no gpt-oss-120b. O acerto do rótulo variou por defeito (Figura~\ref{fig:deteccao}). Essa figura e o macro-F1 consideram o rótulo, não a decisão. Em 14 das 1.200 respostas individuais houve rótulo de defeito com decisão ``aceitar'' (10 em P0); por isso a Tabela~\ref{tab:estrito} mostra, lado a lado, o acerto do rótulo e o acerto estrito, que também exige ``revisar''. Só Claude diverge em P0 (ambiguidade 0,50 contra 0,42; incompletude 0,67 contra 0,58), e as conclusões sobre os modelos não mudam.
+
+\begin{table}[ht]
+\centering
+\caption{Acerto do rótulo / acerto estrito (rótulo correto e decisão ``revisar''), em P0, por modelo e defeito injetado}
+\label{tab:estrito}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Modelo & Ambiguidade & Incompletude & Falta de verif. & Inconsistência \
+\midrule
+Claude & 0,50 / 0,42 & 0,67 / 0,58 & 0,25 / 0,25 & 1,00 / 1,00 \
+GPT-5.6-terra & 0,81 / 0,81 & 0,67 / 0,67 & 0,42 / 0,42 & 1,00 / 1,00 \
+Gemini & 0,39 / 0,39 & 0,64 / 0,64 & 0,47 / 0,47 & 1,00 / 1,00 \
+gpt-oss-120b & 0,22 / 0,22 & 0,64 / 0,64 & 0,03 / 0,03 & 0,94 / 0,94 \
+Júri & 0,64 / 0,64 & 0,61 / 0,61 & 0,33 / 0,33 & 1,00 / 1,00 \
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.75\textwidth]{fig1_deteccao.pdf}
+\caption{Acerto do rótulo do defeito-alvo, independentemente da decisão, por modelo e tipo}
+\label{fig:deteccao}
+\end{figure}
+
+A falta de verificabilidade teve o maior descompasso: os modelos quase sempre pediram revisão, mas, somando quatro modelos e cinco condições, 48\% das respostas rotularam o defeito como ambiguidade e só 31\% como falta de verificabilidade (Figura~\ref{fig:confusao}). Termos como ``rapidamente'' e ``amigável'' são lidos como ambíguos, o que aponta uma fronteira pouco nítida entre rótulos. Também nesse conjunto, 33\% das respostas às variantes ambíguas não apontaram defeito. As demais métricas de RQ1 usam apenas P0.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.62\textwidth]{fig5_confusao.pdf}
+\caption{Defeito injetado (linhas) $\times$ defeito apontado (colunas), em \% por linha, somando quatro modelos e cinco condições (P0 três vezes, P1 e P2)}
+\label{fig:confusao}
+\end{figure}
+
+O rigor variou muito entre modelos (Figura~\ref{fig:fpfn}). Gemini (especificidade 1,00), gpt-oss-120b (0,94) e Claude (0,92) aceitaram quase todos os originais. O GPT-5.6-terra pediu revisão de 92\% deles (especificidade 0,08 \IC{0,00}{0,17}), apontando lacunas menores, como o ponto de início da contagem de um limite de 2 segundos, em geral rotuladas como ambiguidade. Esse maior rigor acompanha seu maior acerto do rótulo de ambiguidade (0,81), mas não demonstra causalidade. O gpt-oss-120b fica no extremo oposto, com a maior taxa de falsos negativos (0,29). O macro-F1 foi maior no Gemini (0,68) e no júri (0,68), seguidos de Claude (0,64), GPT-5.6-terra (0,56) e gpt-oss-120b (0,49).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.62\textwidth]{fig2_fp_fn.pdf}
+\caption{Taxa de falsos positivos (originais marcados para revisão) $\times$ taxa de falsos negativos (variantes aceitas)}
+\label{fig:fpfn}
+\end{figure}
+
+Todos os modelos reduziram a nota no critério afetado (Figura~\ref{fig:queda}). No erro em relação à faixa esperada, o Claude teve o menor valor (MAE 0,21 \IC{0,13}{0,30}), seguido do júri (0,25); o gpt-oss-120b teve o maior (0,48), concentrado em ausência de ambiguidade.
+
+\subsection{RQ2: robustez a mudanças superficiais}
+
+O Claude foi o mais estável entre repetições: mesma decisão em 100\% dos itens, mesmo defeito em 98\% e alfa de 0,98. Seguiram-se Gemini (decisão 97\%; alfa 0,97), GPT-5.6-terra (93\%; 0,90) e gpt-oss-120b (88\%; 0,83), este com o mesmo defeito em só 75\% dos itens, apesar da temperatura 0.
+
+As perturbações mudaram a nota em menos de 0,5 ponto em média (Figura~\ref{fig:robustez}). No contraste pareado por base, a diferença entre variação sob perturbação e ruído foi positiva para Claude em P1 (0,079; IC 95\% \IC{0,054}{0,108}) e P2 (0,146; \IC{0,092}{0,204}), e para o júri em P2 (0,063; \IC{0,021}{0,106}). Para GPT-5.6-terra, Gemini e gpt-oss-120b, os intervalos incluem zero. Isso não demonstra ausência de efeito: são contrastes exploratórios com apenas 12 bases. A troca de decisão sob P2 no Claude excedeu o ruído em 0,083 \IC{0,017}{0,167}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{fig4_robustez.pdf}
+\caption{Variação absoluta média de nota entre repetições (Rep.), com formatação alterada (P1) e com ordem alterada (P2), com IC 95\%. A faixa cinza é o IC do ruído entre repetições}
+\label{fig:robustez}
+\end{figure}
+
+\subsection{RQ3: júri $\times$ modelos individuais}
+
+O júri não superou o melhor modelo, mas ficou perto dele em todas as métricas. Empatou com o Gemini no maior macro-F1 (0,68), teve o segundo menor MAE (0,25) e uma taxa de falsos negativos (0,08) que é metade da do Gemini (0,17). Também neutralizou o modelo menos estável: sua variação de nota entre repetições (0,14) é um terço da do gpt-oss-120b (0,44). Em contrapartida, a especificidade do júri (0,86) ficou abaixo da de três modelos individuais, porque, com quatro juízes, dois votos bastam para ``revisar'' e o GPT-5.6-terra vota assim quase sempre.
+
+A concordância entre modelos foi de 0,74 (alfa de Krippendorff), alta em consistência (0,89) e baixa em ausência de ambiguidade (0,57). O custo total foi de cerca de US\$~2,00 pelos preços de tabela (Claude $\approx$ US\$~0,97; GPT-5.6-terra $\approx$ 0,74; Gemini $\approx$ 0,26; gpt-oss-120b $\approx$ 0,05), com latência média entre 1,5\,s e 3,2\,s por chamada. O júri não exige chamadas extras; seu custo é a soma dos modelos.
+
+\subsection{RQ4: dimensões mais difíceis}
+
+``Difícil'' tem aqui dois sentidos. Pela \emph{sensibilidade da nota}, a queda média no critério afetado ordena as dimensões da menos para a mais sensível: ambiguidade (1,04), incompletude (1,85), falta de verificabilidade (2,61) e inconsistência (3,72) (Figura~\ref{fig:queda}). A ambiguidade teve a menor queda, a menor concordância entre modelos e a menor proporção de variantes marcadas para revisão. Pela \emph{classificação do defeito}, a mais difícil foi a falta de verificabilidade: o problema é percebido (queda grande), mas só 31\% das respostas o rotulam corretamente, e 48\% o chamam de ambiguidade. A inconsistência com regras explícitas foi a mais fácil nos dois sentidos.
+
+\subsection{Sensibilidade ao gabarito em dúvida}\label{sec:sens}
+
+Para verificar se as conclusões dependem dos itens B06-AMB, B07-AMB e B11-AMB, recalculamos as métricas sem as três variantes e sem as três bases inteiras (Tabela~\ref{tab:sens}). A ordem das dimensões pela queda de nota não muda, e os percentuais de rótulo variam no máximo 0,05. O macro-F1 individual varia até 0,03; a única troca de posição é Claude (0,64 para 0,67), que passa à frente do Gemini (0,68 para 0,66) quando as três bases são excluídas. Isso é uma checagem de sensibilidade, não substitui a avaliação independente do gabarito.
+
+\begin{table}[ht]
+\centering
+\caption{Métricas-chave com todos os itens e sem os itens em dúvida (quatro modelos; as duas primeiras linhas usam P0 e as demais, as cinco condições)}
+\label{tab:sens}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Métrica & 12 bases & sem 3 AMB & 9 bases \
+\midrule
+Rótulo correto em ambiguidade & 0,48 & 0,50 & 0,50 \
+Variantes ambíguas sem defeito apontado & 0,33 & 0,31 & 0,31 \
+Falta de verif. rotulada como ambiguidade & 0,48 & 0,48 & 0,53 \
+Falta de verif. rotulada corretamente & 0,31 & 0,31 & 0,27 \
+Queda de nota: ambiguidade & 1,04 & 1,13 & 1,13 \
+Queda de nota: inconsistência & 3,72 & 3,72 & 3,87 \
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{fig3_queda_nota.pdf}
+\caption{Queda média de nota no critério afetado (original $-$ variante), com IC 95\%}
+\label{fig:queda}
+\end{figure}
+
+\section{Discussão}
+
+\textbf{Triagem sim, diagnóstico com cautela.} Neste corpus sintético, alguns modelos separaram bem variantes de originais segundo o gabarito operacional; o desempenho dependeu fortemente do modelo. O diagnóstico do tipo de defeito foi menos confiável, exceto quando houve contradição com regra explícita. Isso sugere testar LLMs como filtro de primeira passagem, com diagnóstico final por um analista e validação em dados reais.
+
+\textbf{Concordância não é acerto.} O padrão relatado por \citet{jain2025}, de juízes que aceitam bem e rejeitam mal, não se repetiu de forma uniforme: aqui, um modelo rejeitou quase tudo e outro aceitou demais. O rigor de cada modelo precisa ser medido com pares correto/defeituoso, e não inferido da concordância com outros juízes.
+
+\textbf{O júri herda o viés do mais severo.} Diferentemente do ganho relatado por \citet{verga2024}, o júri ficou perto do melhor modelo sem superá-lo, em linha com \citet{williams2025}. A regra de agregação importa: com um juiz muito severo, a regra ``pelo menos metade'' desloca o júri para falsos positivos. Excluir o juiz descalibrado ou exigir maioria estrita são alternativas a testar.
+
+\textbf{A taxonomia pesa.} A troca frequente entre ``ambiguidade'' e ``falta de verificabilidade'' sugere que parte da dificuldade está nos rótulos, e não na percepção. Um rubric com exemplos de fronteira entre essas categorias pode melhorar a detecção exata.
+
+\textbf{LLMs como revisores do próprio benchmark.} Na execução-piloto, os modelos apontaram contradições reais em três requisitos que a equipe considerava corretos. O episódio ilustra o uso mais promissor observado: um segundo par de olhos que encontra o que passou despercebido, e não um árbitro final.
+
+\section{Ameaças à validade}
+
+\textbf{Validade interna.} O corpus foi construído pelos pesquisadores, com apoio de um LLM da mesma família de um dos juízes (Claude), o que pode favorecê-lo. Três bases foram corrigidas após a execução-piloto; a correção se limitou a contradições e omissões objetivas em relação às regras do contexto. As variantes incompletas são mais curtas por construção.
+\textbf{Validade de construto.} O gabarito é operacional, não foi validado por avaliadores independentes e assume que cada variante tem só o defeito-alvo. Auditoria prévia levantou dúvidas em B07-AMB e B11-AMB (possível incompletude junto à ambiguidade) e B06-AMB; a análise de sensibilidade da Seção~\ref{sec:sens} mostra que as conclusões gerais se mantêm sem esses itens, mas a adjudicação por avaliadores independentes ainda é necessária; a planilha cega para isso acompanha o repositório (\texttt{benchmark/validacao\_gabarito\_cega.csv}). A separação entre ambiguidade e falta de verificabilidade também não é nítida.
+\textbf{Validade de conclusão.} Com 12 requisitos-base, os intervalos são largos, e múltiplos contrastes foram examinados sem ajuste formal para multiplicidade; as inferências são exploratórias.
+\textbf{Validade externa.} Um único domínio, idioma (inglês) e redação de prompt foram usados, e todos os modelos foram acessados por um único intermediário. Modelos proprietários mudam com o tempo; os resultados valem para as versões e datas registradas.
+
+\section{Conclusão}
+
+Este trabalho apresentou um benchmark controlado para avaliar LLMs como juízes da qualidade de requisitos. Os modelos perceberam a maioria dos defeitos-alvo, mas nomearam o rótulo correto com frequência menor, exceto em inconsistências explícitas. A ambiguidade foi a dimensão menos sensível pela queda de nota; a falta de verificabilidade foi a mais difícil de classificar corretamente. O rigor variou do excesso de exigência ao excesso de aceitação. Mudanças superficiais tiveram efeito pequeno em média, mas distinguível do ruído no Claude e, em P2, no júri. O júri ofereceu um compromisso entre métricas, sem dominar todos os modelos individuais.
+
+Como trabalhos futuros, propõem-se: ampliar o corpus para outros domínios e idiomas; testar variações de prompt e rubrics com exemplos de fronteira entre categorias; avaliar regras de agregação e júris dinâmicos \citep{li2025jury}; incluir decision models \citep{li2026jev}; e comparar o rigor dos modelos com o de analistas humanos.
+
+\textbf{Disponibilidade.} Corpus, prompts, configuração, scripts, respostas brutas e notebook de gráficos estão na pasta \texttt{benchmark/} do repositório \url{https://github.com/jpbezerra/analise-requisitos}, versão \texttt{v1.0-artigo}.
+
+\bibliographystyle{plainnat}
+\bibliography{referencias}
+
+\end{document}
